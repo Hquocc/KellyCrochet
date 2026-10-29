@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KellyCrochet – Đặt hàng</title>
+  <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/pages/checkout.css" />
+</head>
+<body>
+  <div id="header-root"></div>
+  <div id="cart-drawer-root"></div>
+  <div id="search-overlay-root"></div>
+  <div id="toast-root"></div>
+
+  <main id="page-checkout">
+    <header class="checkout-header">
+      <h1 class="page-title">Đặt hàng</h1>
+      <p class="checkout-header__desc">
+        Thanh toán khi nhận hàng (COD). Không cần tài khoản — chỉ cần điền thông tin giao hàng bên dưới.
+      </p>
+    </header>
+
+    <div class="checkout-layout">
+      <section class="checkout-order" aria-labelledby="checkout-order-title">
+        <h2 class="checkout-section-title" id="checkout-order-title">ĐƠN HÀNG CỦA BẠN</h2>
+        <div id="checkout-items" aria-live="polite"></div>
+        <div class="checkout-cost-row checkout-cost-row--subtotal">
+          <span>Tiền sản phẩm</span>
+          <span id="checkout-subtotal"></span>
+        </div>
+        <div class="checkout-cost-row">
+          <span>Phí giao hàng</span>
+          <span id="checkout-shipping"></span>
+        </div>
+        <div class="checkout-total">
+          <span class="checkout-total__label">Tổng cộng</span>
+          <span class="checkout-total__value" id="checkout-total"></span>
+        </div>
+        <p class="checkout-total__note">Thanh toán khi nhận hàng (COD).</p>
+      </section>
+
+      <section class="checkout-form-wrap" aria-labelledby="checkout-form-title">
+        <h2 class="checkout-section-title" id="checkout-form-title">THÔNG TIN GIAO HÀNG</h2>
+        <p class="checkout-error" id="checkout-error" role="alert" hidden></p>
+
+        <form class="checkout-form" id="checkout-form">
+          <div class="checkout-field">
+            <label class="form-label" for="shipping-name">HỌ VÀ TÊN</label>
+            <input class="form-input" id="shipping-name" name="name" type="text" autocomplete="name" maxlength="120" required />
+          </div>
+
+          <div class="checkout-field">
+            <label class="form-label" for="shipping-phone">SỐ ĐIỆN THOẠI</label>
+            <input
+              class="form-input"
+              id="shipping-phone"
+              name="phone"
+              type="tel"
+              autocomplete="tel"
+              inputmode="tel"
+              pattern="[0-9+() -]{9,16}"
+              title="Vui lòng nhập số điện thoại hợp lệ."
+              required
+            />
+          </div>
+
+          <div class="checkout-field">
+            <label class="form-label" for="shipping-email">EMAIL</label>
+            <input class="form-input" id="shipping-email" name="email" type="email" autocomplete="email" maxlength="254" />
+          </div>
+
+          <div class="checkout-field-row">
+            <div class="checkout-field">
+              <label class="form-label" for="shipping-city">TỈNH / THÀNH PHỐ</label>
+              <input class="form-input" id="shipping-city" name="city" type="text" autocomplete="address-level1" maxlength="120" required />
+            </div>
+            <div class="checkout-field">
+              <label class="form-label" for="shipping-ward">XÃ / PHƯỜNG</label>
+              <input class="form-input" id="shipping-ward" name="ward" type="text" autocomplete="address-level3" maxlength="120" required />
+            </div>
+          </div>
+
+          <div class="checkout-field">
+            <label class="form-label" for="shipping-neighborhood">KHU PHỐ / ẤP</label>
+            <input class="form-input" id="shipping-neighborhood" name="neighborhood" type="text" maxlength="120" required />
+          </div>
+
+          <div class="checkout-field">
+            <label class="form-label" for="shipping-address">ĐỊA CHỈ CHI TIẾT (SỐ NHÀ, ĐƯỜNG)</label>
+            <input class="form-input" id="shipping-address" name="address" type="text" autocomplete="street-address" maxlength="250" required />
+          </div>
+
+          <div class="checkout-field">
+            <label class="form-label" for="shipping-note">GHI CHÚ (KHÔNG BẮT BUỘC)</label>
+            <textarea class="form-input checkout-note" id="shipping-note" name="note" rows="2" maxlength="500"></textarea>
+          </div>
+
+          <p class="checkout-payment-note">Phương thức thanh toán: Thanh toán khi nhận hàng (COD)</p>
+          <button class="btn btn--dark btn--full" id="checkout-submit" type="submit">XÁC NHẬN ĐẶT HÀNG</button>
+          <a class="checkout-form__back" href="shop.html">Quay lại cửa hàng</a>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <div id="footer-root"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/data/products.js"></script>
+  <script src="js/components/header.js"></script>
+  <script src="js/components/footer.js"></script>
+  <script src="js/components/cart.js"></script>
+  <script src="js/components/search.js"></script>
+  <script src="js/components/toast.js"></script>
+  <script src="js/components/productCard.js"></script>
+  <script src="js/utils/animations.js"></script>
+  <script src="js/pages/checkout.js"></script>
+</body>
+</html>

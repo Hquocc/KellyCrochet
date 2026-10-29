@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="theme-color" content="#f8f6f2" />
+  <title>KellyCrochet Admin – Khách hàng</title><link rel="icon" type="image/png" href="../assets/images/favicon.png" /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet" /><link rel="stylesheet" href="admin.css" />
+</head>
+<body><div class="admin-shell"><aside class="sidebar" id="admin-sidebar"></aside><main class="main-content"><header class="topbar" id="admin-topbar"></header><div class="page-content">
+  <section class="page-heading"><div><p class="eyebrow">CỘNG ĐỒNG KELLYCROCHET</p><h1>Khách hàng</h1><p class="page-heading__subtitle">Thông tin liên hệ và lịch sử mua hàng minh hoạ.</p></div></section>
+  <section class="panel full-panel"><div class="panel-heading panel-heading--table"><div><p class="panel-kicker">DANH SÁCH KHÁCH HÀNG</p><h2>Khách hàng thân thiết</h2></div><label class="table-search"><span class="visually-hidden">Tìm khách hàng</span><input id="customer-search" type="search" placeholder="Tên, email hoặc số điện thoại..." autocomplete="off" /></label></div><div class="table-scroll"><table class="data-table"><thead><tr><th>KHÁCH HÀNG</th><th>EMAIL</th><th>ĐIỆN THOẠI</th><th>ĐƠN HÀNG</th><th>TỔNG CHI TIÊU</th></tr></thead><tbody id="customers-table"></tbody></table></div><p class="table-empty" id="customers-empty" hidden>Không tìm thấy khách hàng.</p></section>
+  <footer class="page-footer">© 2026 KellyCrochet · Khu vực quản trị nội bộ</footer>
+</div></main></div>
+<script src="../js/api.js"></script><script src="js/components/shell.js"></script><script src="js/admin-store.js"></script><script src="js/components/templates.js"></script><script src="js/components/dialogs.js"></script><script src="js/features/products.js"></script><script src="js/features/orders.js"></script><script src="js/features/requests.js"></script><script src="js/features/directory.js"></script><script src="js/admin-app.js"></script></body></html>

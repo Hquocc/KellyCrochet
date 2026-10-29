@@ -1,0 +1,86 @@
+@media (min-width: 1500px) {
+  .page-content { padding-right: 68px; padding-left: 68px; }
+}
+
+@media (max-width: 1100px) {
+  .sidebar { width: 210px; padding-right: 14px; padding-left: 14px; }
+  .main-content { margin-left: 210px; }
+  .overview-grid { grid-template-columns: minmax(0, 1fr); }
+  .recent-orders { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 22px; }
+  .recent-order:nth-child(2) { border-top: 0; }
+  .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .report-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 700px) {
+  .sidebar { position: sticky; inset: 0 0 auto; width: 100%; height: auto; padding: 10px 15px 0; border-right: 0; border-bottom: 1px solid var(--admin-line); }
+  .brand { padding: 0 2px 9px; }
+  .brand__mark { width: 31px; height: 31px; font-size: 23px; }
+  .brand__name { font-size: 19px; }
+  .brand__name small { margin-top: 4px; font-size: 8px; }
+  .sidebar__label, .sidebar__bottom { display: none; }
+  .sidebar-nav { display: flex; gap: 4px; overflow-x: auto; margin: 0 -15px; padding: 0 12px; scrollbar-width: none; }
+  .sidebar-nav::-webkit-scrollbar { display: none; }
+  .sidebar-nav__link { min-height: 41px; flex: 0 0 auto; gap: 7px; border-radius: 4px 4px 0 0; padding: 0 10px; font-size: 11px; }
+  .sidebar-nav__link.is-active { box-shadow: inset 0 -2px var(--admin-accent); background: transparent; }
+  .nav-count { display: none; }
+  .sidebar-nav__link { font-size: 10px; }
+  .main-content { margin-left: 0; }
+  .topbar { position: static; min-height: 46px; padding: 0 17px; }
+  .topbar__right { gap: 9px; }
+  .demo-badge { padding: 4px 7px; font-size: 8px; }
+  .topbar__date { font-size: 9px; }
+  .page-content { padding: 27px 16px 20px; }
+  .page-heading { align-items: flex-start; margin-bottom: 18px; }
+  .page-heading h1 { font-size: 34px; }
+  .page-heading__subtitle { max-width: 230px; font-size: 11px; }
+  .page-heading .button { min-height: 32px; gap: 7px; padding: 0 9px; font-size: 9px; }
+  .stats-grid { gap: 9px; margin-bottom: 11px; }
+  .stat-card { padding: 12px; }
+  .stat-card__top { gap: 5px; font-size: 10px; }
+  .stat-card__value { margin-top: 9px; font-size: 25px; }
+  .stat-card__note { min-height: 15px; font-size: 9px; }
+  .overview-grid { gap: 11px; margin-bottom: 11px; }
+  .panel { padding: 15px 13px; }
+  .panel-heading h2 { font-size: 21px; }
+  .panel-heading--table { align-items: flex-start; flex-direction: column; margin-bottom: 12px; }
+  .panel-heading--table > .button, .panel-heading--table > .period-select { align-self: flex-start; }
+  .table-actions, .table-actions--orders { width: 100%; align-items: stretch; flex-direction: column; }
+  .table-actions .table-search { width: 100%; }
+  .table-actions .button { align-self: flex-start; }
+  .table-actions--orders .order-filters { order: 1; }
+  .table-actions--orders .button { order: 0; }
+  .dialog-form { padding: 18px; }
+  .table-search { width: 100%; min-height: 35px; }
+  .table-scroll { margin: 0 -13px; }
+  .data-table { min-width: 650px; }
+  .data-table th:first-child, .data-table td:first-child { padding-left: 13px; }
+  .data-table th, .data-table td { padding-right: 12px; padding-left: 12px; }
+  .order-filters { width: 100%; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+  .order-filters::-webkit-scrollbar { display: none; }
+  .filter-chip { flex: 0 0 auto; }
+  .recent-orders { grid-template-columns: minmax(0, 1fr); }
+  .recent-order:nth-child(2) { border-top: 1px solid #f0ece6; }
+  .settings-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; padding-top: 15px; }
+  .settings-fields { grid-template-columns: minmax(0, 1fr); }
+  .report-cards { gap: 8px; }
+  .report-card { min-height: 105px; padding: 10px; }
+  .report-card strong { font-size: 19px; }
+}
+
+@media (max-width: 360px) {
+  .topbar__date { display: none; }
+  .page-content { padding-right: 12px; padding-left: 12px; }
+  .page-heading { gap: 8px; }
+  .page-heading h1 { font-size: 30px; }
+  .page-heading .button { gap: 5px; padding: 0 7px; }
+  .stats-grid { gap: 7px; }
+  .stat-card { padding: 10px; }
+  .stat-card__value { font-size: 23px; }
+  .report-cards { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+

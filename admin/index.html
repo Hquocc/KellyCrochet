@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f8f6f2" />
+  <title>KellyCrochet Admin – Tổng quan</title>
+  <link rel="icon" type="image/png" href="../assets/images/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <div class="admin-shell">
+    <aside class="sidebar" id="admin-sidebar"></aside>
+    <main class="main-content">
+      <header class="topbar" id="admin-topbar"></header>
+      <div class="page-content">
+        <section class="page-heading">
+          <div>
+            <p class="eyebrow">KELLYCROCHET · KHÔNG GIAN QUẢN TRỊ</p>
+            <h1>Tổng quan</h1>
+            <p class="page-heading__subtitle">Theo dõi hoạt động cửa hàng và những việc cần xử lý hôm nay.</p>
+          </div>
+          <a class="button button--outline" href="../shop.html">Xem cửa hàng</a>
+        </section>
+
+        <section class="stats-grid" aria-label="Tổng quan hoạt động">
+          <article class="stat-card"><div class="stat-card__top">Doanh thu tháng</div><p class="stat-card__value" id="stat-month-revenue">Đang tải</p><p class="stat-card__note">Đơn hàng không bị huỷ trong tháng này</p></article>
+          <article class="stat-card"><div class="stat-card__top">Đơn chờ xác nhận</div><p class="stat-card__value" id="stat-new-order-count">0</p><p class="stat-card__note">Cần được xử lý</p></article>
+          <article class="stat-card"><div class="stat-card__top">Sản phẩm đang bán</div><p class="stat-card__value" id="stat-product-count">0</p><p class="stat-card__note">Đang được trưng bày</p></article>
+          <article class="stat-card"><div class="stat-card__top">Yêu cầu chờ báo giá</div><p class="stat-card__value" id="stat-request-count">0</p><p class="stat-card__note">Cần được phản hồi</p></article>
+        </section>
+
+        <section class="overview-grid">
+          <article class="panel revenue-panel">
+            <div class="panel-heading"><div><p class="panel-kicker">HIỆU SUẤT</p><h2>Doanh thu</h2></div><span class="period-select">7 ngày gần đây</span></div>
+            <div class="chart-summary"><strong id="dashboard-week-revenue">Đang tải</strong><span class="trend">7 ngày gần đây</span></div>
+            <div class="chart" role="img" aria-label="Biểu đồ doanh thu 7 ngày gần đây">
+              <div class="chart__grid"><span>1.200k</span><span>900k</span><span>600k</span><span>300k</span><span>0</span></div>
+              <div class="chart__bars" id="dashboard-week-chart"></div>
+            </div>
+            <p class="table-footnote">Doanh thu tính theo ngày tạo đơn, không gồm đơn đã huỷ.</p>
+          </article>
+          <article class="panel recent-panel">
+            <div class="panel-heading"><div><p class="panel-kicker">MỚI CẬP NHẬT</p><h2>Đơn hàng gần đây</h2></div><a class="text-link" href="orders.html">Tất cả đơn hàng</a></div>
+            <div class="recent-orders" id="recent-orders"></div>
+          </article>
+        </section>
+
+        <section class="panel dashboard-requests">
+          <div class="panel-heading"><div><p class="panel-kicker">ĐẶT MÓN THEO YÊU CẦU</p><h2>Yêu cầu báo giá đang chờ</h2></div><a class="text-link" href="requests.html">Quản lý yêu cầu</a></div>
+          <div class="dashboard-request-list" id="dashboard-requests"></div>
+        </section>
+
+        <footer class="page-footer">© 2026 KellyCrochet <span>·</span> Khu vực quản trị nội bộ</footer>
+      </div>
+    </main>
+  </div>
+  <script src="../js/api.js"></script>
+  <script src="js/components/shell.js"></script>
+  <script src="js/admin-store.js"></script>
+  <script src="js/components/templates.js"></script>
+  <script src="js/components/dialogs.js"></script>
+  <script src="js/features/products.js"></script>
+  <script src="js/features/orders.js"></script>
+  <script src="js/features/requests.js"></script>
+  <script src="js/features/directory.js"></script>
+  <script src="js/admin-app.js"></script>
+</body>
+</html>

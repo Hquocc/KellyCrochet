@@ -1,0 +1,81 @@
+/* ============================================================
+   pages/custom.css  –  Trang đặt món riêng
+   ============================================================ */
+
+.custom-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-16);
+  align-items: start;
+  padding-top: var(--space-8);
+}
+
+.custom-info__eyebrow {
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  color: var(--color-text-accent);
+  margin-bottom: var(--space-4);
+}
+
+.custom-info__title {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-5);
+  line-height: 1.15;
+}
+
+.custom-info__desc {
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin-bottom: var(--space-8);
+}
+
+.custom-info__img {
+  width: 100%;
+  border-radius: var(--radius-sm);
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: #e8d9c5;
+}
+
+.custom-info__img--reveal {
+  animation: customImageReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes customImageReveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(1.03);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .custom-info__img--reveal {
+    animation: none;
+  }
+}
+
+/* Form */
+.custom-form-wrap {
+  padding-top: var(--space-10);
+}
+
+@media (max-width: 700px) {
+  .custom-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-8);
+    padding-top: var(--space-2);
+  }
+
+  .custom-info__title {
+    font-size: clamp(var(--text-2xl), 8vw, var(--text-3xl));
+  }
+
+  .custom-form-wrap {
+    padding-top: 0;
+  }
+}

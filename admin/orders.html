@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="theme-color" content="#f8f6f2" />
+  <title>KellyCrochet Admin – Đơn hàng</title><link rel="icon" type="image/png" href="../assets/images/favicon.png" /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet" /><link rel="stylesheet" href="admin.css" />
+</head>
+<body><div class="admin-shell"><aside class="sidebar" id="admin-sidebar"></aside><main class="main-content"><header class="topbar" id="admin-topbar"></header><div class="page-content">
+  <section class="page-heading"><div><p class="eyebrow">QUẢN LÝ CỬA HÀNG</p><h1>Đơn hàng</h1><p class="page-heading__subtitle">Theo dõi, cập nhật trạng thái và quản lý đơn của khách hàng.</p></div></section>
+  <section class="panel orders-panel">
+    <div class="panel-heading panel-heading--table"><div><p class="panel-kicker">THEO DÕI ĐƠN</p><h2>Tất cả đơn hàng</h2></div><div class="table-actions table-actions--orders"><div class="order-filters" role="group" aria-label="Lọc đơn hàng"><button class="filter-chip is-selected" type="button" data-status="all" aria-pressed="true">Tất cả</button><button class="filter-chip" type="button" data-status="pending_confirmation" aria-pressed="false">Chờ xác nhận</button><button class="filter-chip" type="button" data-status="preparing" aria-pressed="false">Đang chuẩn bị</button><button class="filter-chip" type="button" data-status="shipping" aria-pressed="false">Đang giao</button><button class="filter-chip" type="button" data-status="completed" aria-pressed="false">Hoàn thành</button><button class="filter-chip" type="button" data-status="cancelled" aria-pressed="false">Đã huỷ</button></div></div></div>
+    <div class="table-scroll"><table class="data-table order-table"><thead><tr><th>MÃ ĐƠN</th><th>KHÁCH HÀNG</th><th>NGÀY ĐẶT</th><th>TỔNG TIỀN</th><th>TRẠNG THÁI</th><th>THAO TÁC</th></tr></thead><tbody id="orders-table"></tbody></table></div>
+    <p class="table-empty" id="orders-empty" hidden>Không có đơn hàng ở trạng thái này.</p>
+  </section>
+  <footer class="page-footer">© 2026 KellyCrochet · Khu vực quản trị nội bộ</footer>
+</div></main></div>
+<script src="../js/api.js"></script><script src="js/components/shell.js"></script><script src="js/admin-store.js"></script><script src="js/components/templates.js"></script><script src="js/components/dialogs.js"></script><script src="js/features/products.js"></script><script src="js/features/orders.js"></script><script src="js/features/requests.js"></script><script src="js/features/directory.js"></script><script src="js/admin-app.js"></script></body></html>

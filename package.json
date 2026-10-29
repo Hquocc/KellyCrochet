@@ -1,0 +1,17 @@
+{
+  "name": "kelly-crochet",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "seed:admin": "node src/scripts/seedAdmin.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.19.0"
+  }
+}

@@ -1,0 +1,134 @@
+/* ============================================================
+   base.css  –  Reset & kiểu chữ nền
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Typography helpers ── */
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: normal;
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* ── Utility ── */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ── Layout wrappers ── */
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+}
+
+main {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-10) clamp(16px, 5vw, var(--space-6)) var(--space-16);
+}
+
+/* ── Page title ── */
+
+.page-title {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-3);
+}
+
+/* ── Section helpers ── */
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-8);
+}
+
+.section-title {
+  font-size: var(--text-xl);
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* ── Links ── */
+
+.link-arrow {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast);
+}
+.link-arrow:hover { color: var(--color-text); }
+
+.link-underline {
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* ── Breadcrumb ── */
+
+.breadcrumb-back {
+  display: inline-block;
+  font-size: var(--text-sm);
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-8);
+  transition: color var(--transition-fast);
+}
+.breadcrumb-back:hover { color: var(--color-text); }

@@ -1,0 +1,71 @@
+/* ============================================================
+   variables.css  –  Design tokens toàn cục
+   Thay đổi ở đây sẽ ảnh hưởng toàn bộ website
+   ============================================================ */
+
+:root {
+  /* ── Màu sắc chính ── */
+  --background:         oklch(97.5% .01 75);
+  --color-bg:           var(--background);
+  --color-bg-warm:      #ede0d0;   /* nền section CTA */
+  --color-surface:      #ffffff;
+  --color-border:       #e0d4c3;
+
+  --color-text:         #3b2f24;   /* nâu đậm – body */
+  --color-text-muted:   #8c7b6b;   /* nâu nhạt – phụ */
+  --color-text-accent:  #b07c50;   /* nâu vàng – nhãn */
+
+  --color-primary:      #2d2319;   /* nút dark */
+  --color-primary-text: var(--background);
+  --color-accent:       #c0825a;   /* highlight nhỏ */
+
+  /* ── Typography ── */
+  --font-serif:   'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-sans:    'Helvetica Neue', Arial, sans-serif;
+  --font-logo:    'Cormorant Garamond', Georgia, serif;
+
+  --price-color: var(--color-text-accent);
+  --price-font-family: var(--font-serif);
+  --price-font-size: 1rem;
+  --price-font-weight: 500;
+
+  --text-xs:   0.7rem;
+  --text-sm:   0.8rem;
+  --text-base: 0.9375rem;  /* 15px */
+  --text-lg:   1.125rem;
+  --text-xl:   1.5rem;
+  --text-2xl:  2rem;
+  --text-3xl:  2.75rem;
+  --text-4xl:  3.5rem;
+
+  /* ── Spacing ── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* ── Layout ── */
+  --max-width:     1080px;
+  --header-height: 56px;
+
+  /* ── Border radius ── */
+  --radius-sm: 2px;
+  --radius-md: 6px;
+
+  /* ── Transitions ── */
+  --transition-fast:   0.15s ease;
+  --transition-base:   0.25s ease;
+  --transition-slow:   0.45s cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ── Shadows ── */
+  --shadow-sm:  0 1px 4px rgba(59,47,36,0.08);
+  --shadow-md:  0 4px 16px rgba(59,47,36,0.12);
+  --shadow-lg:  0 12px 40px rgba(59,47,36,0.16);
+}

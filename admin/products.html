@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="theme-color" content="#f8f6f2" />
+  <title>KellyCrochet Admin – Sản phẩm</title><link rel="icon" type="image/png" href="../assets/images/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet" /><link rel="stylesheet" href="admin.css" />
+</head>
+<body><div class="admin-shell"><aside class="sidebar" id="admin-sidebar"></aside><main class="main-content"><header class="topbar" id="admin-topbar"></header><div class="page-content">
+  <section class="page-heading"><div><p class="eyebrow">QUẢN LÝ CỬA HÀNG</p><h1>Sản phẩm</h1><p class="page-heading__subtitle">Thêm, chỉnh sửa và quản lý sản phẩm trong cửa hàng.</p></div><a class="button button--outline" href="../shop.html">Xem cửa hàng</a></section>
+  <section class="panel products-panel">
+    <div class="panel-heading panel-heading--table"><div><p class="panel-kicker">DANH SÁCH</p><h2>Tất cả sản phẩm</h2></div><div class="table-actions"><label class="table-search"><span class="visually-hidden">Tìm sản phẩm</span><input id="product-search" type="search" placeholder="Tìm sản phẩm..." autocomplete="off" /></label><button class="button button--dark" type="button" id="add-product-button">Thêm sản phẩm</button></div></div>
+    <div class="table-scroll"><table class="data-table"><thead><tr><th>SẢN PHẨM</th><th>DANH MỤC</th><th>MÀU SẮC</th><th>GIÁ BÁN</th><th>SỐ LƯỢNG</th><th>TÌNH TRẠNG</th><th>THAO TÁC</th></tr></thead><tbody id="products-table"></tbody></table></div>
+    <p class="table-empty" id="products-empty" hidden>Không tìm thấy sản phẩm phù hợp.</p>
+    <p class="table-footnote">Danh sách và thay đổi sản phẩm được đồng bộ với cơ sở dữ liệu.</p>
+  </section>
+  <footer class="page-footer">© 2026 KellyCrochet · Khu vực quản trị nội bộ</footer>
+</div></main></div>
+<script src="../js/api.js"></script><script src="js/components/shell.js"></script><script src="js/admin-store.js"></script><script src="js/components/templates.js"></script><script src="js/components/dialogs.js"></script><script src="js/features/products.js"></script><script src="js/features/orders.js"></script><script src="js/features/requests.js"></script><script src="js/features/directory.js"></script><script src="js/admin-app.js"></script></body></html>

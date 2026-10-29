@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KellyCrochet – Sản phẩm</title>
+  <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/pages/product.css" />
+</head>
+<body>
+
+  <div id="header-root"></div>
+  <div id="cart-drawer-root"></div>
+  <div id="search-overlay-root"></div>
+  <div id="toast-root"></div>
+
+  <!-- ===================== PAGE: PRODUCT DETAIL ===================== -->
+  <main id="page-product">
+
+    <a href="shop.html" class="breadcrumb-back section-fade-in">← CỬA HÀNG</a>
+
+    <!-- Product Detail injected by JS based on URL param ?id= -->
+    <div class="product-detail section-fade-in" id="product-detail"></div>
+
+    <!-- Related Products -->
+    <section class="related-products section-fade-in">
+      <h2 class="section-title">Có thể bạn thích</h2>
+      <div class="product-grid" id="related-product-grid"></div>
+    </section>
+
+  </main>
+
+  <div id="footer-root"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/data/products.js"></script>
+  <script src="js/components/header.js"></script>
+  <script src="js/components/footer.js"></script>
+  <script src="js/components/cart.js"></script>
+  <script src="js/components/search.js"></script>
+  <script src="js/components/toast.js"></script>
+  <script src="js/components/productCard.js"></script>
+  <script src="js/utils/animations.js"></script>
+  <script src="js/pages/product.js"></script>
+</body>
+</html>

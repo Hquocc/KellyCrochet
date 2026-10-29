@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KellyCrochet – Cửa hàng</title>
+  <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/pages/shop.css" />
+</head>
+<body>
+
+  <div id="header-root"></div>
+  <div id="cart-drawer-root"></div>
+  <div id="search-overlay-root"></div>
+  <div id="toast-root"></div>
+
+  <!-- ===================== PAGE: SHOP ===================== -->
+  <main id="page-shop">
+
+    <div class="shop-header section-fade-in">
+      <h1 class="page-title">Cửa hàng</h1>
+      <label class="shop-search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="16.5" y1="16.5" x2="22" y2="22"/>
+        </svg>
+        <span class="visually-hidden">Tìm sản phẩm trong cửa hàng</span>
+        <input
+          id="shop-search-input"
+          type="search"
+          placeholder="Tìm túi, mũ, thú bông..."
+          autocomplete="off"
+        />
+      </label>
+    </div>
+
+    <div class="shop-layout">
+
+      <!-- Sidebar Filter -->
+      <aside class="shop-sidebar section-fade-in">
+
+        <div class="filter-group">
+          <h3 class="filter-label">DANH MỤC</h3>
+          <ul class="filter-list" id="filter-category" data-filter-list="category">
+            <li><button class="filter-btn active" data-filter="category" data-value="all">Tất cả</button></li>
+            <li><button class="filter-btn" data-filter="category" data-value="túi">Túi</button></li>
+            <li><button class="filter-btn" data-filter="category" data-value="mũ">Mũ</button></li>
+            <li><button class="filter-btn" data-filter="category" data-value="khăn">Khăn</button></li>
+            <li><button class="filter-btn" data-filter="category" data-value="thú bông">Thú bông</button></li>
+          </ul>
+        </div>
+
+        <div class="filter-group">
+          <h3 class="filter-label">MÀU SẮC</h3>
+          <ul class="filter-list" id="filter-color" data-filter-list="color">
+            <li><button class="filter-btn active" data-filter="color" data-value="all">Tất cả</button></li>
+            <li><button class="filter-btn" data-filter="color" data-value="kem">Kem</button></li>
+            <li><button class="filter-btn" data-filter="color" data-value="hồng">Hồng</button></li>
+            <li><button class="filter-btn" data-filter="color" data-value="xanh">Xanh</button></li>
+            <li><button class="filter-btn" data-filter="color" data-value="nâu">Nâu</button></li>
+          </ul>
+        </div>
+
+        <div class="filter-group">
+          <h3 class="filter-label">GIÁ</h3>
+          <ul class="filter-list" id="filter-price">
+            <li><button class="filter-btn active" data-filter="price" data-value="all">Tất cả</button></li>
+            <li><button class="filter-btn" data-filter="price" data-value="300000">Dưới 300.000₫</button></li>
+            <li><button class="filter-btn" data-filter="price" data-value="400000">Dưới 400.000₫</button></li>
+          </ul>
+        </div>
+
+      </aside>
+
+      <!-- Product area -->
+      <div class="shop-main">
+        <div class="shop-toolbar section-fade-in">
+          <span class="product-count" id="product-count">6 sản phẩm</span>
+          <select class="sort-select" id="sort-select">
+            <option value="newest">Mới nhất</option>
+            <option value="price-asc">Giá tăng dần</option>
+            <option value="price-desc">Giá giảm dần</option>
+          </select>
+        </div>
+        <div class="product-grid" id="shop-product-grid"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="footer-root"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/data/products.js"></script>
+  <script src="js/components/header.js"></script>
+  <script src="js/components/footer.js"></script>
+  <script src="js/components/cart.js"></script>
+  <script src="js/components/search.js"></script>
+  <script src="js/components/toast.js"></script>
+  <script src="js/components/productCard.js"></script>
+  <script src="js/utils/animations.js"></script>
+  <script src="js/pages/shop.js"></script>
+</body>
+</html>

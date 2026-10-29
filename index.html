@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KellyCrochet – Đồ móc len thủ công</title>
+  <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Karla:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/pages/home.css" />
+</head>
+<body>
+
+  <!-- ===================== HEADER COMPONENT ===================== -->
+  <div id="header-root"></div>
+
+  <!-- ===================== CART DRAWER COMPONENT ===================== -->
+  <div id="cart-drawer-root"></div>
+
+  <!-- ===================== SEARCH OVERLAY COMPONENT ===================== -->
+  <div id="search-overlay-root"></div>
+
+  <!-- ===================== TOAST NOTIFICATION ===================== -->
+  <div id="toast-root"></div>
+
+  <!-- ===================== PAGE: HOME ===================== -->
+  <main id="page-home">
+
+    <!-- Hero Section -->
+    <section class="hero section-fade-in">
+      <div class="hero__content">
+        <p class="hero__eyebrow">Thủ công · Từng mũi len</p>
+        <h1 class="hero__title">
+          Mềm mại, <em>chậm rãi</em>, và làm bằng tay.
+        </h1>
+        <p class="hero__desc">
+          Những món đồ móc len nhỏ xinh cho bạn và người thương<br />
+          mỗi sản phẩm là duy nhất.
+        </p>
+        <a href="shop.html" class="btn btn--dark">XEM BỘ SƯU TẬP</a>
+      </div>
+      <div class="hero__image">
+        <img
+          src="assets/images/hero.jpg"
+          alt="Đồ móc len KellyCrochet"
+          class="hero__img img-reveal"
+        />
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="new-products section-fade-in">
+      <div class="section-header">
+        <h2 class="section-title">Sản phẩm</h2>
+        <a href="shop.html" class="link-arrow">Xem tất cả →</a>
+      </div>
+      <!-- Product cards injected by JS -->
+      <div class="product-grid" id="home-product-grid"></div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="cta-banner section-fade-in">
+      <div class="cta-banner__inner">
+        <h2 class="cta-banner__title">Đặt một món riêng cho bạn</h2>
+        <p class="cta-banner__desc">Chọn màu len và kích thước theo ý thích.</p>
+        <a href="custom.html" class="btn btn--outline">ĐẶT MÓN RIÊNG</a>
+      </div>
+    </section>
+
+    <!-- Crochet Guides Section -->
+    <section class="guides-preview" aria-labelledby="guides-title">
+      <div class="section-header">
+        <div>
+          <p class="guides-preview__eyebrow">Chia sẻ từ KellyCrochet</p>
+          <h2 class="section-title" id="guides-title">Góc đan móc</h2>
+        </div>
+        <a href="guides.html" class="link-arrow">Xem cẩm nang →</a>
+      </div>
+      <p class="guides-preview__intro">
+        Một vài mẹo nhỏ để bạn bắt đầu với len sợi và chăm sóc món đồ thủ công yêu thích.
+      </p>
+      <div class="guide-grid">
+        <a class="guide-card" href="guides.html#choose-yarn">
+          <div class="guide-card__image-wrap">
+            <img src="assets/images/cholen.jpg" alt="Cuộn len và tay đang móc len" loading="lazy" />
+          </div>
+          <div class="guide-card__body">
+            <span class="guide-card__category">Bắt đầu từ sợi len</span>
+            <h3 class="guide-card__title">Chọn len thế nào cho món đồ đầu tiên?</h3>
+            <p class="guide-card__excerpt">Phân biệt cotton, acrylic và cách chọn sợi theo mục đích sử dụng.</p>
+            <span class="guide-card__read-more">Đọc hướng dẫn <span aria-hidden="true">→</span></span>
+          </div>
+        </a>
+
+        <a class="guide-card" href="guides.html#crochet-basics">
+          <div class="guide-card__image-wrap">
+            <img src="assets/images/muilen.jpeg" alt="Các sản phẩm móc len và dụng cụ móc" loading="lazy" />
+          </div>
+          <div class="guide-card__body">
+            <span class="guide-card__category">Dành cho người mới</span>
+            <h3 class="guide-card__title">Những mũi móc cơ bản để bắt đầu</h3>
+            <p class="guide-card__excerpt">Làm quen với mũi bính, mũi đơn và cách đọc hướng dẫn đơn giản.</p>
+            <span class="guide-card__read-more">Đọc hướng dẫn <span aria-hidden="true">→</span></span>
+          </div>
+        </a>
+ 
+        <a class="guide-card" href="guides.html#care-yarn">
+          <div class="guide-card__image-wrap">
+            <img src="assets/images/chamlen.jpg" alt="Túi len thủ công màu kem" loading="lazy" />
+          </div>
+          <div class="guide-card__body">
+            <span class="guide-card__category">Giữ đồ bền đẹp</span>
+            <h3 class="guide-card__title">Chăm sóc đồ len đúng cách</h3>
+            <p class="guide-card__excerpt">Giặt nhẹ nhàng, phơi đúng cách và cất giữ để đồ len luôn đẹp.</p>
+            <span class="guide-card__read-more">Đọc hướng dẫn <span aria-hidden="true">→</span></span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== FOOTER COMPONENT ===================== -->
+  <div id="footer-root"></div>
+
+  <!-- ===================== SCRIPTS ===================== -->
+  <script src="js/api.js"></script>
+  <script src="js/data/products.js"></script>
+  <script src="js/components/header.js"></script>
+  <script src="js/components/footer.js"></script>
+  <script src="js/components/cart.js"></script>
+  <script src="js/components/search.js"></script>
+  <script src="js/components/toast.js"></script>
+  <script src="js/components/productCard.js"></script>
+  <script src="js/utils/animations.js"></script>
+  <script src="js/pages/home.js"></script>
+</body>
+</html>
