@@ -78,6 +78,36 @@
   font-size: 15px;
 }
 
+.login-password {
+  position: relative;
+  display: block;
+}
+
+.login-password input {
+  padding-right: 52px;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--admin-muted);
+  cursor: pointer;
+}
+
+.password-toggle:hover { background: var(--admin-bg); color: var(--admin-ink); }
+.password-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
+.password-toggle__slash { transition: opacity .15s; }
+.password-toggle[aria-pressed="true"] .password-toggle__slash { opacity: 0; }
+
 .login-field input::placeholder {
   color: #b2a79b;
   font-weight: 400;

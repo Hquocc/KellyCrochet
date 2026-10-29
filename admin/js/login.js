@@ -4,6 +4,15 @@
   const form = document.getElementById('admin-login-form');
   const errorMessage = document.getElementById('login-error');
   const submitButton = form.querySelector('[type="submit"]');
+  const passwordInput = document.getElementById('admin-password');
+  const passwordToggle = form.querySelector('.password-toggle');
+
+  passwordToggle.addEventListener('click', () => {
+    const visible = passwordInput.type === 'password';
+    passwordInput.type = visible ? 'text' : 'password';
+    passwordToggle.setAttribute('aria-label', visible ? 'Ẩn mật khẩu' : 'Hiện mật khẩu');
+    passwordToggle.setAttribute('aria-pressed', String(visible));
+  });
 
   function showError(message) {
     errorMessage.textContent = message;
@@ -27,6 +36,8 @@
     if (!form.reportValidity()) return;
     errorMessage.hidden = true;
     submitButton.disabled = true;
+    submitButton.classList.add('is-loading');
+    submitButton.textContent = 'Đang đăng nhập...';
     try {
       const data = new FormData(form);
       const result = await KellyApi.request('/api/auth/login', {
@@ -48,6 +59,8 @@
       showError(error.message || 'Không thể đăng nhập. Vui lòng thử lại.');
     } finally {
       submitButton.disabled = false;
+      submitButton.classList.remove('is-loading');
+      submitButton.textContent = 'Đăng nhập';
     }
   });
 

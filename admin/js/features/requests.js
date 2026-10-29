@@ -57,6 +57,7 @@
   async function saveQuote(event) {
     event.preventDefault();
     const form = event.currentTarget;
+    if (form.dataset.saving === 'true') return;
     if (!form.reportValidity()) return;
     const data = new FormData(form);
     const id = String(data.get('id'));
@@ -73,6 +74,13 @@
       return;
     }
 
+    const submitButton = form.querySelector('[type="submit"]');
+    const submitLabel = submitButton.textContent;
+    form.dataset.saving = 'true';
+    form.setAttribute('aria-busy', 'true');
+    submitButton.disabled = true;
+    submitButton.classList.add('is-loading');
+    submitButton.textContent = 'Đang cập nhật...';
     try {
       await KellyApi.request(`/api/requests/${encodeURIComponent(id)}`, {
         method: 'PATCH',
@@ -87,10 +95,16 @@
       await store.initialize();
       window.AdminApp.refreshData();
       document.getElementById('quote-dialog').close();
-      store.notify('Đã cập nhật trạng thái và báo giá trên máy chủ.');
+      store.notify(status === 'quoted' ? 'Gửi báo giá thành công!' : 'Từ chối yêu cầu thành công!');
     } catch (error) {
       console.error('Không thể cập nhật yêu cầu:', error);
       store.notify(error.message || 'Không thể cập nhật yêu cầu.', 'error');
+    } finally {
+      submitButton.disabled = false;
+      submitButton.classList.remove('is-loading');
+      submitButton.textContent = submitLabel;
+      form.removeAttribute('aria-busy');
+      delete form.dataset.saving;
     }
   }
 

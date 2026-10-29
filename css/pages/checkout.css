@@ -50,6 +50,31 @@
   background: var(--color-bg-warm);
 }
 
+.checkout-order__custom-image {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  background: var(--color-bg-warm);
+  color: var(--color-text-accent);
+  font-size: var(--text-xl);
+}
+
+.checkout-order__custom-message {
+  border-left: 2px solid var(--color-accent);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.checkout-form .form-input[readonly] {
+  background: var(--color-bg-warm);
+  color: var(--color-text-muted);
+  cursor: default;
+}
+
 .checkout-order__item-name {
   font-family: var(--font-serif);
   font-size: var(--text-base);

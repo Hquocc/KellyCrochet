@@ -99,21 +99,23 @@ KellyCrochet/
 - `layouts/main.html` là tệp mẫu; sao chép khung vào trang mới và giữ đường dẫn tương đối phù hợp với vị trí trang.
 - Giao diện quản trị bắt đầu tại `admin/index.html`; mỗi mục quản trị có một trang HTML riêng.
 - Admin đọc/ghi sản phẩm, danh mục, đơn hàng và yêu cầu báo giá qua API; màn hình được bảo vệ bằng JWT và chỉ tài khoản Admin được truy cập.
+- Admin hiển thị trạng thái loading khi tải dữ liệu/chuyển trang và gửi biểu mẫu; màn hình đăng nhập có nút hiện/ẩn mật khẩu.
 - `admin/login.html` đăng nhập qua `POST /api/auth/login`; token được lưu trên thiết bị để dùng cho các thao tác quản trị.
 - Điều hướng giữa các trang admin tải lại phần nội dung bằng Fetch và cập nhật History API; cần mở website qua HTTP/HTTPS (ví dụ Live Server). Nếu Fetch không dùng được, trình duyệt tự tải trang theo cách thông thường.
 - CSS quản trị được chia theo phần trong `admin/css/`; JavaScript tách store, components và features trong `admin/js/`. Nội dung quản trị dùng Times New Roman, riêng logo giữ Cormorant Garamond và link không gạch chân.
-- Admin hỗ trợ lưu nhiều URL ảnh, màu sắc, tồn kho và CRUD danh mục; dữ liệu nghiệp vụ được đồng bộ với MongoDB.
+- Admin hỗ trợ chọn tối đa 10 ảnh từ thiết bị cho mỗi sản phẩm, xem trước/xoá ảnh, dùng ảnh đầu làm ảnh đại diện và hiển thị ảnh chi tiết dạng trượt ngang tự động; ảnh được nén WebP và lưu cùng dữ liệu sản phẩm trong MongoDB.
 - Trang đơn hàng có chi tiết đơn, tiến trình trạng thái và lịch sử cập nhật; trạng thái được chuyển theo từng bước.
 - Backend dùng MVC kết hợp service layer: API route → controller → service → model. Mảng sản phẩm trong đơn được nhúng cùng giá/tên tại thời điểm mua; danh mục được tham chiếu bằng ObjectId.
 - Giá, số lượng, email, trạng thái và quyền được xác thực ở model/API. Ngày tạo/cập nhật do Mongoose tự lưu; tồn kho được trừ khi tạo đơn và hoàn lại khi hủy đơn trước khi giao.
 - Cửa hàng tải danh mục/sản phẩm, gửi đơn COD và gửi yêu cầu đặt riêng qua API. Danh sách đơn khách xem trên trang `orders.html` được lưu trên thiết bị vừa đặt hàng, chưa có tài khoản khách để tra cứu xuyên thiết bị.
 - Cài đặt cửa hàng hiện lưu trong `localStorage` của trình duyệt quản trị; chưa có collection/API cấu hình cửa hàng.
 - Mã trạng thái API: sản phẩm `selling` / `out_of_stock` (tự tính theo tồn kho); danh mục `visible` / `hidden`; đơn `pending_confirmation` → `preparing` → `shipping` → `completed` hoặc hủy trước khi giao; yêu cầu `waiting_quote` → `quoted` → `accepted` hoặc `rejected`.
-- Ngân sách yêu cầu hiện nhận chuỗi tự do để hỗ trợ các lựa chọn như “dưới 300.000”; ảnh sản phẩm lưu dưới dạng danh sách URL/đường dẫn, chưa có dịch vụ upload ảnh.
+- Ngân sách yêu cầu hiện nhận chuỗi tự do để hỗ trợ các lựa chọn như “dưới 300.000”; ảnh sản phẩm được nén sang WebP và lưu trong MongoDB, chưa dùng dịch vụ lưu trữ ảnh bên ngoài.
+- Khách có thể theo dõi báo giá/lý do từ chối trên trang `orders.html` bằng mã bí mật lưu trên thiết bị đã gửi yêu cầu. Khi đồng ý, khách nhập địa chỉ để tạo đơn COD; sản phẩm đặt riêng hiển thị trong danh sách đơn hàng, giá báo cộng phí giao hàng 30.000₫.
 
 ## Cách thêm sản phẩm mới
 
-Tạo và cập nhật sản phẩm trong `admin/products.html`. Sản phẩm dùng danh mục đang hiển thị, danh sách màu và URL/đường dẫn ảnh; API tự lưu `createdAt` và tính trạng thái theo số lượng. Mảng `PRODUCTS` trong `js/data/products.js` chỉ là dữ liệu tạm trước khi API tải xong, không phải nguồn lưu trữ.
+Tạo và cập nhật sản phẩm trong `admin/products.html`. Chọn tối đa 10 ảnh từ thiết bị; ảnh được tự nén sang WebP, ảnh đầu tiên làm ảnh đại diện và các ảnh có thể trượt ngang trên trang chi tiết. Sản phẩm dùng danh mục đang hiển thị, danh sách màu và API tự lưu `createdAt`, tính trạng thái theo số lượng. Mảng `PRODUCTS` trong `js/data/products.js` chỉ là dữ liệu tạm trước khi API tải xong, không phải nguồn lưu trữ.
 
 ## Cách thay đổi màu sắc / style
 

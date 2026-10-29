@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
 
 const orderItemSchema = new mongoose.Schema({
-  productId: { type: mongoose.Schema.Types.ObjectId, required: true },
+  productId: { type: mongoose.Schema.Types.ObjectId },
+  customRequestId: { type: mongoose.Schema.Types.ObjectId, ref: 'CustomRequest' },
   productName: { type: String, required: true, trim: true, maxlength: 160 },
   priceAtPurchase: { type: Number, required: true, min: 0, validate: Number.isSafeInteger },
   color: { type: String, required: true, trim: true, maxlength: 40 },
   quantity: { type: Number, required: true, min: 1, validate: Number.isInteger },
+  requestedColors: { type: [{ type: String, trim: true, maxlength: 40 }], default: [] },
+  customDescription: { type: String, trim: true, maxlength: 5000, default: '' },
 }, { _id: false });
 
 const orderSchema = new mongoose.Schema({
@@ -35,7 +38,8 @@ const orderSchema = new mongoose.Schema({
     type: [orderItemSchema],
     required: true,
     validate: {
-      validator: (items) => items.length > 0 && items.length <= 100,
+      validator: (items) => items.length > 0 && items.length <= 100
+        && items.every((item) => Boolean(item.productId) !== Boolean(item.customRequestId)),
       message: 'An order must contain between 1 and 100 products.',
     },
   },

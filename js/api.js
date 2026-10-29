@@ -3,9 +3,10 @@
 
   const TOKEN_KEY = 'kc_access_token';
 
-  async function request(path, { method = 'GET', body, authenticated = false } = {}) {
+  async function request(path, { method = 'GET', body, authenticated = false, trackingToken } = {}) {
     const headers = { Accept: 'application/json' };
     if (body !== undefined) headers['Content-Type'] = 'application/json';
+    if (trackingToken) headers['X-Request-Token'] = trackingToken;
     if (authenticated) {
       const token = localStorage.getItem(TOKEN_KEY);
       if (!token) throw new Error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');

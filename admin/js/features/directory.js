@@ -35,6 +35,7 @@
   async function saveCategory(event) {
     event.preventDefault();
     const form = event.currentTarget;
+    if (form.dataset.saving === 'true') return;
     if (!form.reportValidity()) return;
     const data = new FormData(form);
     const id = String(data.get('id') || '');
@@ -43,6 +44,13 @@
       store.notify('Vui lòng nhập tên danh mục.', 'error');
       return;
     }
+    const submitButton = form.querySelector('[type="submit"]');
+    const submitLabel = submitButton.textContent;
+    form.dataset.saving = 'true';
+    form.setAttribute('aria-busy', 'true');
+    submitButton.disabled = true;
+    submitButton.classList.add('is-loading');
+    submitButton.textContent = id ? 'Đang cập nhật...' : 'Đang thêm...';
     try {
       await KellyApi.request(id ? `/api/categories/${encodeURIComponent(id)}` : '/api/categories', {
         method: id ? 'PATCH' : 'POST',
@@ -56,25 +64,35 @@
       await store.initialize();
       window.AdminApp.refreshData();
       document.getElementById('category-dialog').close();
-      store.notify(id ? 'Đã cập nhật danh mục.' : 'Đã thêm danh mục.');
+      store.notify(id ? 'Cập nhật danh mục thành công!' : 'Thêm danh mục thành công!');
     } catch (error) {
       console.error('Không thể lưu danh mục:', error);
       store.notify(error.message || 'Không thể lưu danh mục.', 'error');
+    } finally {
+      submitButton.disabled = false;
+      submitButton.classList.remove('is-loading');
+      submitButton.textContent = submitLabel;
+      form.removeAttribute('aria-busy');
+      delete form.dataset.saving;
     }
   }
 
-  async function removeCategory(id) {
+  async function removeCategory(id, button) {
     const category = store.categories.find((item) => item.id === id);
     if (!category) return;
     if (!window.confirm(`Xoá danh mục “${category.name}”?`)) return;
+    const stopLoading = store.beginButtonLoading(button, 'Đang xóa...');
+    if (button && !stopLoading) return;
     try {
       await KellyApi.request(`/api/categories/${encodeURIComponent(id)}`, { method: 'DELETE', authenticated: true });
       await store.initialize();
       window.AdminApp.refreshData();
-      store.notify('Đã xoá danh mục.');
+      store.notify('Xóa danh mục thành công!');
     } catch (error) {
       console.error('Không thể xoá danh mục:', error);
       store.notify(error.message || 'Không thể xoá danh mục.', 'error');
+    } finally {
+      stopLoading?.();
     }
   }
 
@@ -108,7 +126,7 @@
       if (!button) return;
       const category = store.categories.find((item) => item.id === button.dataset.id);
       if (button.dataset.categoryAction === 'edit' && category) openCategory(category);
-      if (button.dataset.categoryAction === 'delete') removeCategory(button.dataset.id);
+      if (button.dataset.categoryAction === 'delete') removeCategory(button.dataset.id, button);
     });
     document.getElementById('customer-search')?.addEventListener('input', (event) => renderCustomers(event.currentTarget.value));
   }

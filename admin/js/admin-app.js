@@ -7,6 +7,14 @@
   ]);
   let navigationController;
 
+  function setLoading(active, message = 'Đang tải...') {
+    const loader = document.getElementById('admin-loading');
+    if (!loader) return;
+    document.getElementById('admin-loading-message').textContent = message;
+    loader.hidden = !active;
+    document.querySelector('.main-content')?.setAttribute('aria-busy', String(active));
+  }
+
   function renderDate() {
     const date = document.getElementById('today-date');
     if (date) {
@@ -127,14 +135,28 @@
     });
     form.addEventListener('submit', (event) => {
       event.preventDefault();
+      if (form.dataset.saving === 'true' || !form.reportValidity()) return;
+      const submitButton = form.querySelector('[type="submit"]');
+      const submitLabel = submitButton.textContent;
       const data = new FormData(form);
       const value = Object.fromEntries(fields.map((field) => [field, String(data.get(field) || '').trim()]));
+      form.dataset.saving = 'true';
+      form.setAttribute('aria-busy', 'true');
+      submitButton.disabled = true;
+      submitButton.classList.add('is-loading');
+      submitButton.textContent = 'Đang lưu...';
       try {
         localStorage.setItem('kc_store_settings', JSON.stringify(value));
-        window.AdminStore.notify('Đã lưu cài đặt trên trình duyệt này.');
+        window.AdminStore.notify('Lưu cài đặt thành công!');
       } catch (error) {
         console.error('Không thể lưu cài đặt trên trình duyệt:', error);
         window.AdminStore.notify('Không thể lưu cài đặt trên trình duyệt này.', 'error');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.classList.remove('is-loading');
+        submitButton.textContent = submitLabel;
+        form.removeAttribute('aria-busy');
+        delete form.dataset.saving;
       }
     });
     form.dataset.adminBound = 'true';
@@ -177,6 +199,7 @@
     navigationController?.abort();
     navigationController = new AbortController();
     const controller = navigationController;
+    setLoading(true, 'Đang tải trang...');
     try {
       const response = await fetch(url, { signal: controller.signal });
       if (!response.ok) throw new Error(`Tải trang thất bại (${response.status}): ${url.href}`);
@@ -200,6 +223,8 @@
       console.warn('Điều hướng nội bộ không khả dụng, chuyển sang tải trang bình thường:', error);
       if (historyMode === 'pop') window.location.reload();
       else window.location.assign(url.href);
+    } finally {
+      if (navigationController === controller) setLoading(false);
     }
   }
 
@@ -223,6 +248,7 @@
   }
 
   async function init() {
+    setLoading(true, 'Đang tải dữ liệu quản trị...');
     try {
       if (!localStorage.getItem(KellyApi.TOKEN_KEY)) {
         window.location.replace('login.html');
@@ -251,6 +277,8 @@
       message.setAttribute('role', 'alert');
       message.textContent = `Không thể tải dữ liệu quản trị: ${error.message}`;
       document.querySelector('.page-content')?.replaceChildren(message);
+    } finally {
+      setLoading(false);
     }
   }
 

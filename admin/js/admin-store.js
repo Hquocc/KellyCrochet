@@ -38,6 +38,19 @@
     notice.timeoutId = window.setTimeout(() => notice.classList.remove('is-visible'), 4500);
   }
 
+  function beginButtonLoading(button, label = 'Đang xử lý...') {
+    if (!button || button.disabled) return null;
+    const originalText = button.textContent;
+    button.disabled = true;
+    button.classList.add('is-loading');
+    button.textContent = label;
+    return () => {
+      button.disabled = false;
+      button.classList.remove('is-loading');
+      button.textContent = originalText;
+    };
+  }
+
   function normalizeCategory(category) {
     return {
       ...category,
@@ -76,10 +89,13 @@
       statusHistory: [{ status, at: order.updatedAt || order.createdAt, note: 'Trạng thái hiện tại' }],
       items: order.items.map((item) => ({
         id: String(item.productId),
+        customRequestId: item.customRequestId ? String(item.customRequestId) : '',
         name: item.productName,
         qty: item.quantity,
         price: item.priceAtPurchase,
         color: item.color,
+        requestedColors: item.requestedColors || [],
+        customDescription: item.customDescription || '',
       })),
     };
   }
@@ -154,6 +170,7 @@
     PRODUCT_STATUS,
     REQUEST_STATUS,
     aggregateCustomers,
+    beginButtonLoading,
     escapeHTML: (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
     })[character]),

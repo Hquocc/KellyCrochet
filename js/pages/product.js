@@ -27,13 +27,29 @@
       `<option value="${escapeHTML(color)}">${escapeHTML(color)}</option>`
     ).join('');
     const available = product.status !== 'out_of_stock' && product.quantity > 0;
+    const galleryControls = images.length > 1 ? `
+      <div class="product-detail__gallery-controls" aria-label="Điều khiển thư viện ảnh">
+        <button class="product-detail__gallery-arrow" type="button" data-gallery-prev aria-label="Ảnh trước">‹</button>
+        <span class="product-detail__gallery-count" id="product-gallery-count" aria-live="polite">1 / ${images.length}</span>
+        <div class="product-detail__gallery-dots">
+          ${images.map((image, index) => `<button type="button" class="product-detail__gallery-dot${index === 0 ? ' is-active' : ''}" data-gallery-slide="${index}" aria-label="Xem ảnh ${index + 1}" aria-pressed="${index === 0}"></button>`).join('')}
+        </div>
+        <button class="product-detail__gallery-arrow" type="button" data-gallery-next aria-label="Ảnh tiếp theo"${images.length === 1 ? ' disabled' : ''}>›</button>
+      </div>
+    ` : '';
 
     container.innerHTML = `
       <div class="product-detail__gallery">
-        <img class="product-detail__img img-reveal" id="product-main-image" src="${escapeHTML(images[0])}" alt="${escapeHTML(product.name)}" onerror="this.src='assets/images/placeholder.jpg'" />
-        ${images.length > 1 ? `<div class="product-detail__thumbnails">${images.map((image, index) =>
-          `<button type="button" class="product-detail__thumbnail" data-image-index="${index}" aria-label="Xem ảnh ${index + 1}"><img src="${escapeHTML(image)}" alt="" loading="lazy" /></button>`
-        ).join('')}</div>` : ''}
+        <div class="product-detail__gallery-viewport" id="product-gallery-viewport" tabindex="0" aria-label="Ảnh sản phẩm, vuốt ngang để xem thêm">
+          <div class="product-detail__gallery-track">
+            ${images.map((image, index) => `
+              <div class="product-detail__gallery-slide" role="group" aria-label="Ảnh ${index + 1} trên ${images.length}">
+                <img class="product-detail__img img-reveal" src="${escapeHTML(image)}" alt="${escapeHTML(product.name)}${images.length > 1 ? ` - ảnh ${index + 1}` : ''}" ${index ? 'loading="lazy"' : ''} onerror="this.src='assets/images/placeholder.jpg'" />
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        ${galleryControls}
       </div>
       <div class="product-detail__info">
         <div class="product-detail__breadcrumb"><a href="shop.html">${escapeHTML(product.category.toUpperCase())}</a><span>/</span><span>${escapeHTML(product.name.toUpperCase())}</span></div>
@@ -72,12 +88,68 @@
       CartDrawer.addItem(product.id, currentQty, document.getElementById('product-color').value);
       CartDrawer.open();
     });
-    container.querySelectorAll('[data-image-index]').forEach((button) => {
-      button.addEventListener('click', () => {
-        const image = images[Number(button.dataset.imageIndex)];
-        document.getElementById('product-main-image').src = image;
+    const gallery = document.getElementById('product-gallery-viewport');
+    const galleryRoot = gallery.closest('.product-detail__gallery');
+    const galleryDots = [...container.querySelectorAll('[data-gallery-slide]')];
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let activeSlide = 0;
+    let autoAdvanceTimer;
+    const updateGalleryControls = () => {
+      activeSlide = gallery.clientWidth
+        ? Math.min(images.length - 1, Math.round(gallery.scrollLeft / gallery.clientWidth))
+        : 0;
+      galleryDots.forEach((dot, index) => {
+        dot.classList.toggle('is-active', index === activeSlide);
+        dot.setAttribute('aria-pressed', String(index === activeSlide));
       });
+      const count = document.getElementById('product-gallery-count');
+      if (count) count.textContent = `${activeSlide + 1} / ${images.length}`;
+    };
+    const stopAutoAdvance = () => {
+      window.clearTimeout(autoAdvanceTimer);
+      autoAdvanceTimer = undefined;
+    };
+    const scheduleAutoAdvance = () => {
+      stopAutoAdvance();
+      if (images.length < 2 || reducedMotion.matches || document.hidden
+        || galleryRoot.matches(':hover') || galleryRoot.contains(document.activeElement)) return;
+      autoAdvanceTimer = window.setTimeout(() => scrollToSlide(activeSlide + 1), 4000);
+    };
+    const scrollToSlide = (index) => {
+      const nextSlide = (index + images.length) % images.length;
+      gallery.scrollTo({
+        left: nextSlide * gallery.clientWidth,
+        behavior: reducedMotion.matches ? 'auto' : 'smooth',
+      });
+      scheduleAutoAdvance();
+    };
+    gallery.addEventListener('scroll', () => {
+      updateGalleryControls();
+      scheduleAutoAdvance();
+    }, { passive: true });
+    galleryDots.forEach((dot) => dot.addEventListener('click', () => scrollToSlide(Number(dot.dataset.gallerySlide))));
+    container.querySelector('[data-gallery-prev]')?.addEventListener('click', () => scrollToSlide(activeSlide - 1));
+    container.querySelector('[data-gallery-next]')?.addEventListener('click', () => scrollToSlide(activeSlide + 1));
+    galleryRoot.addEventListener('pointerenter', stopAutoAdvance);
+    galleryRoot.addEventListener('pointerleave', scheduleAutoAdvance);
+    galleryRoot.addEventListener('pointerdown', stopAutoAdvance);
+    galleryRoot.addEventListener('pointerup', scheduleAutoAdvance);
+    galleryRoot.addEventListener('focusin', stopAutoAdvance);
+    galleryRoot.addEventListener('focusout', () => window.setTimeout(scheduleAutoAdvance));
+    gallery.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        scrollToSlide(activeSlide - 1);
+      }
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        scrollToSlide(activeSlide + 1);
+      }
     });
+    document.addEventListener('visibilitychange', scheduleAutoAdvance);
+    reducedMotion.addEventListener('change', scheduleAutoAdvance);
+    updateGalleryControls();
+    scheduleAutoAdvance();
     Animations.init();
   }
 

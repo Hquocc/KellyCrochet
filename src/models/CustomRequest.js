@@ -27,6 +27,8 @@ const customRequestSchema = new mongoose.Schema({
   description: { type: String, required: true, trim: true, maxlength: 5000 },
   quoteMessage: { type: String, trim: true, maxlength: 3000, default: '' },
   quotedPrice: { type: Number, min: 0, default: null, validate: (value) => value === null || Number.isSafeInteger(value) },
+  trackingTokenHash: { type: String, select: false, match: /^[a-f0-9]{64}$/ },
+  orderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Order', default: null },
   status: {
     type: String,
     enum: ['waiting_quote', 'quoted', 'accepted', 'rejected'],

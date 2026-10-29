@@ -1,5 +1,5 @@
 const customRequestService = require('../services/customRequestService');
-const { requireUser } = require('../middleware/auth');
+const { optionalUser, requireUser } = require('../middleware/auth');
 const { assertObjectId, pagination, readBody } = require('../utils/http');
 
 async function list(request) {
@@ -8,8 +8,13 @@ async function list(request) {
 }
 
 async function get(request) {
-  await requireUser(request, ['admin']);
-  return customRequestService.getCustomRequest(assertObjectId(request.query?.id));
+  const user = await optionalUser(request);
+  const id = assertObjectId(request.query?.id);
+  if (user?.role === 'admin') return customRequestService.getCustomRequest(id);
+  return customRequestService.getCustomerRequest(
+    id,
+    request.headers?.['x-request-token'] || request.headers?.['X-Request-Token'],
+  );
 }
 
 async function create(request) {
@@ -21,4 +26,13 @@ async function update(request) {
   return customRequestService.updateCustomRequest(assertObjectId(request.query?.id), readBody(request));
 }
 
-module.exports = { create, get, list, update };
+async function createOrder(request) {
+  const body = readBody(request);
+  return customRequestService.createOrderFromQuote(
+    assertObjectId(request.query?.id),
+    request.headers?.['x-request-token'] || request.headers?.['X-Request-Token'],
+    body,
+  );
+}
+
+module.exports = { create, createOrder, get, list, update };

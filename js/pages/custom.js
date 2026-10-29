@@ -85,7 +85,7 @@
     const button = form.querySelector('[type="submit"]');
     button.disabled = true;
     try {
-      await KellyApi.request('/api/requests', {
+      const submitted = await KellyApi.request('/api/requests', {
         method: 'POST',
         body: {
           customer: {
@@ -100,12 +100,24 @@
           description: String(data.get('description')).trim(),
         },
       });
+      let trackingSaved = true;
+      try {
+        const trackedRequests = JSON.parse(localStorage.getItem('kc_custom_requests') || '[]');
+        if (!Array.isArray(trackedRequests)) throw new Error('Dữ liệu theo dõi yêu cầu không hợp lệ.');
+        trackedRequests.push({ id: submitted.requestId, token: submitted.trackingToken });
+        localStorage.setItem('kc_custom_requests', JSON.stringify(trackedRequests));
+      } catch (error) {
+        trackingSaved = false;
+        console.error('Không thể lưu mã theo dõi yêu cầu trên thiết bị:', error);
+      }
       form.reset();
       document.getElementById('product-type-value').value = categories[0]?._id || '';
       document.querySelectorAll('#product-type-group .tag').forEach((tag, index) => {
         tag.classList.toggle('tag--active', index === 0);
       });
-      window.Toast?.show('Yêu cầu đã được gửi! Kelly sẽ liên hệ báo giá trong 24 giờ.');
+      window.Toast?.show(trackingSaved
+        ? `Yêu cầu đã gửi! Mã #${submitted.requestId.slice(-8).toUpperCase()}. Theo dõi báo giá tại trang Đơn hàng của tôi.`
+        : `Yêu cầu đã gửi (mã #${submitted.requestId.slice(-8).toUpperCase()}) nhưng thiết bị không lưu được mã theo dõi. Vui lòng liên hệ cửa hàng để nhận báo giá.`);
     } catch (error) {
       console.error('Không thể gửi yêu cầu làm sản phẩm:', error);
       showError(error.message || 'Không thể gửi yêu cầu. Vui lòng thử lại.');

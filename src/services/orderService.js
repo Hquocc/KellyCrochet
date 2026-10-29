@@ -127,6 +127,7 @@ async function updateOrderStatus(id, nextStatus) {
 
       if (nextStatus === 'cancelled') {
         for (const item of order.items) {
+          if (item.customRequestId) continue;
           const product = await Product.findByIdAndUpdate(
             item.productId,
             { $inc: { quantity: item.quantity } },

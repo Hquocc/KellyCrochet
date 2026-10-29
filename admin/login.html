@@ -33,7 +33,12 @@
 
       <label class="login-field" for="admin-password">
         Mật khẩu
-        <input id="admin-password" name="password" type="password" autocomplete="current-password" placeholder="Nhập mật khẩu" required />
+        <span class="login-password">
+          <input id="admin-password" name="password" type="password" autocomplete="current-password" placeholder="Nhập mật khẩu" required />
+          <button class="password-toggle" type="button" aria-label="Hiện mật khẩu" aria-pressed="false" aria-controls="admin-password">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle><path class="password-toggle__slash" d="m4 4 16 16"></path></svg>
+          </button>
+        </span>
       </label>
 
       <p class="login-notice" id="login-error" role="alert" hidden></p>

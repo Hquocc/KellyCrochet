@@ -11,6 +11,7 @@
   const SHIPPING_FEE = 30000;
   let cart = [];
   let products = [];
+  let customQuote;
 
   function readCart() {
     const stored = JSON.parse(localStorage.getItem('kc_cart') || '[]');
@@ -56,6 +57,65 @@
     cart = valid;
   }
 
+  function getTrackedRequest(requestId) {
+    let records;
+    try {
+      records = JSON.parse(localStorage.getItem('kc_custom_requests') || '[]');
+    } catch (error) {
+      throw new Error('Không đọc được mã theo dõi báo giá trên thiết bị này.', { cause: error });
+    }
+    if (!Array.isArray(records)) throw new Error('Dữ liệu theo dõi báo giá không hợp lệ.');
+    const record = records.find((item) => item?.id === requestId && /^[a-f\d]{64}$/i.test(item.token || ''));
+    if (!record) throw new Error('Không tìm thấy mã theo dõi báo giá trên thiết bị này.');
+    return record;
+  }
+
+  async function renderCustomQuote(requestId) {
+    const record = getTrackedRequest(requestId);
+    customQuote = await KellyApi.request(`/api/requests/${encodeURIComponent(requestId)}`, {
+      trackingToken: record.token,
+    });
+    if (customQuote.status !== 'quoted' || !Number.isSafeInteger(customQuote.quotedPrice)) {
+      throw new Error('Báo giá này không còn chờ xác nhận. Hãy xem lại trang Đơn hàng của tôi.');
+    }
+
+    document.title = `KellyCrochet – Xác nhận ${customQuote.productName}`;
+    document.querySelector('#page-checkout .page-title').textContent = 'Xác nhận đặt món riêng';
+    document.querySelector('.checkout-header__desc').textContent =
+      'Kiểm tra sản phẩm theo yêu cầu và nhập địa chỉ giao hàng. Thanh toán khi nhận hàng (COD).';
+    document.getElementById('checkout-order-title').textContent = 'SẢN PHẨM ĐẶT RIÊNG';
+    const backLink = form.querySelector('.checkout-form__back');
+    backLink.href = 'orders.html';
+    backLink.textContent = 'Quay lại báo giá';
+    itemsContainer.innerHTML = `
+      <article class="checkout-order__item checkout-order__custom-item">
+        <div class="checkout-order__custom-image" aria-hidden="true">✿</div>
+        <div>
+          <p class="checkout-order__item-name">${ProductCard.escapeHTML(customQuote.productName)}</p>
+          <p class="checkout-order__item-qty">${ProductCard.escapeHTML(customQuote.category)} · Màu: ${ProductCard.escapeHTML((customQuote.requestedColors || []).join(', '))}</p>
+          <p class="checkout-order__item-qty">${ProductCard.escapeHTML(customQuote.description)}</p>
+          <p class="checkout-order__item-qty">Mã yêu cầu #${ProductCard.escapeHTML(requestId.slice(-8).toUpperCase())}</p>
+        </div>
+        <span class="checkout-order__item-price">${formatPrice(customQuote.quotedPrice)}</span>
+      </article>
+      <p class="checkout-order__custom-message">${ProductCard.escapeHTML(customQuote.quoteMessage)}</p>
+    `;
+    subtotalElement.textContent = formatPrice(customQuote.quotedPrice);
+    shippingElement.textContent = formatPrice(SHIPPING_FEE);
+    totalElement.textContent = formatPrice(customQuote.quotedPrice + SHIPPING_FEE);
+
+    for (const [name, value] of Object.entries({
+      name: customQuote.customer.name,
+      phone: customQuote.customer.phone,
+      email: customQuote.customer.email || '',
+    })) {
+      const input = form.elements[name];
+      input.value = value;
+      input.readOnly = true;
+    }
+    submitButton.textContent = 'XÁC NHẬN ĐẶT MÓN RIÊNG · COD';
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
     errorElement.hidden = true;
@@ -77,20 +137,29 @@
 
     let order;
     try {
-      order = await KellyApi.request('/api/orders', {
-        method: 'POST',
-        body: {
-          customer,
-          note: String(data.get('note') || '').trim(),
-          paymentMethod: 'COD',
-          items: cart.map((item) => ({
-            productId: item.id,
-            color: item.color,
-            quantity: item.qty,
-          })),
-        },
-      });
-
+      order = customQuote
+        ? await KellyApi.request(`/api/requests/${encodeURIComponent(customQuote.id)}`, {
+          method: 'POST',
+          trackingToken: getTrackedRequest(customQuote.id).token,
+          body: {
+            customer: {
+              address: customer.address,
+            },
+          },
+        })
+        : await KellyApi.request('/api/orders', {
+          method: 'POST',
+          body: {
+            customer,
+            note: String(data.get('note') || '').trim(),
+            paymentMethod: 'COD',
+            items: cart.map((item) => ({
+              productId: item.id,
+              color: item.color,
+              quantity: item.qty,
+            })),
+          },
+        });
     } catch (error) {
       console.error('Không thể tạo đơn hàng:', error);
       showError(error.message || 'Không thể tạo đơn hàng. Vui lòng thử lại.');
@@ -108,26 +177,35 @@
     } catch (error) {
       console.error('Đơn đã được tạo nhưng không thể lưu thông tin theo dõi trên thiết bị:', error);
     }
-    let cartCleared = false;
-    try {
-      localStorage.setItem('kc_cart', JSON.stringify([]));
-      cartCleared = true;
-    } catch (error) {
-      console.error('Đơn đã được tạo nhưng không thể xoá giỏ hàng trên thiết bị:', error);
+    let cartCleared = true;
+    if (!customQuote) {
+      cartCleared = false;
+      try {
+        localStorage.setItem('kc_cart', JSON.stringify([]));
+        cartCleared = true;
+      } catch (error) {
+        console.error('Đơn đã được tạo nhưng không thể xoá giỏ hàng trên thiết bị:', error);
+      }
     }
     const query = new URLSearchParams({
       orderId: order._id || order.id || '',
       trackingSaved: trackingSaved ? '1' : '0',
       cartCleared: cartCleared ? '1' : '0',
+      ...(customQuote ? { customOrder: '1' } : {}),
     });
     window.location.href = `orders.html?${query}`;
   }
 
   async function init() {
     try {
-      cart = readCart();
-      products = await ProductCatalog.load();
-      renderItems();
+      const requestId = new URLSearchParams(window.location.search).get('requestId');
+      if (requestId) {
+        await renderCustomQuote(requestId);
+      } else {
+        cart = readCart();
+        products = await ProductCatalog.load();
+        renderItems();
+      }
     } catch (error) {
       console.error('Không thể tải dữ liệu checkout:', error);
       showError(error.message || 'Không tải được dữ liệu đơn hàng. Vui lòng tải lại trang.');

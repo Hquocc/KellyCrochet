@@ -4,11 +4,14 @@ const productSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true, maxlength: 160 },
   price: { type: Number, required: true, min: 0, validate: Number.isSafeInteger },
   images: {
-    type: [{ type: String, trim: true, maxlength: 2048 }],
+    type: [{ type: String, trim: true, maxlength: 350000 }],
     required: true,
     validate: {
-      validator: (images) => images.length > 0 && images.length <= 10,
-      message: 'A product must have between 1 and 10 images.',
+      validator: (images) => images.length > 0 && images.length <= 10
+        && images.every((image) => image.startsWith('data:image/webp;base64,')
+          ? /^data:image\/webp;base64,[A-Za-z0-9+/]+={0,2}$/.test(image)
+          : image.length <= 2048),
+      message: 'A product must have 1 to 10 valid images.',
     },
   },
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true, index: true },

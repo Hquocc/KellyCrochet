@@ -45,9 +45,10 @@
         <label class="settings-field">Tên sản phẩm<input name="name" required maxlength="100" /></label>
         <div class="dialog-fields"><label class="settings-field">Danh mục<select name="category" required></select></label><label class="settings-field">Màu sắc<textarea name="colors" rows="2" required maxlength="800" placeholder="Trắng, Đỏ, Xanh..."></textarea></label></div>
         <div class="dialog-fields"><label class="settings-field">Giá bán (₫)<input name="price" type="number" min="0" step="1" required /></label><label class="settings-field">Số lượng tồn kho<input name="quantity" type="number" min="0" step="1" required /></label></div>
-        <label class="settings-field">Danh sách ảnh (mỗi URL hoặc đường dẫn một dòng)<textarea name="images" rows="3" required maxlength="20000" placeholder="https://...&#10;assets/images/ten-anh.jpg"></textarea><small>Ảnh được lưu dưới dạng URL/đường dẫn, không lưu dữ liệu ảnh trực tiếp trong MongoDB.</small></label>
+        <label class="settings-field image-picker">Ảnh sản phẩm<input name="images" type="file" accept="image/*" multiple /><small>Chọn tối đa 10 ảnh. Ảnh đầu tiên là ảnh đại diện; ảnh được nén và lưu cùng sản phẩm.</small></label>
         <div class="image-preview-list" id="product-image-preview" aria-live="polite"></div>
         <label class="settings-field">Mô tả<textarea name="desc" rows="3" maxlength="5000" required></textarea></label>
+        <p class="product-form-notice" id="product-form-notice" role="status" aria-live="polite" hidden></p>
         <div class="dialog-actions"><button class="button button--outline" type="button" data-close-dialog>Huỷ</button><button class="button button--dark" type="submit">Lưu sản phẩm</button></div>
       </form>
     </dialog>
@@ -88,11 +89,15 @@
         <div class="dialog-heading"><div><p class="panel-kicker">PHẢN HỒI KHÁCH HÀNG</p><h2 id="quote-dialog-title">Cập nhật báo giá</h2></div><button class="dialog-close" type="button" data-close-dialog>Đóng</button></div>
         <input type="hidden" name="id" /><div class="request-detail" id="quote-request-detail"></div>
         <label class="settings-field">Báo giá cuối cùng (₫)<input name="quote" type="number" min="0" step="1" /></label>
-        <label class="settings-field">Trạng thái yêu cầu<select name="status" required><option value="quoted">Đã báo giá – chờ khách xác nhận</option><option value="accepted">Khách đã đồng ý báo giá</option><option value="rejected">Không nhận yêu cầu</option></select></label>
+        <label class="settings-field">Trạng thái yêu cầu<select name="status" required><option value="quoted">Đã báo giá – chờ khách xác nhận</option><option value="rejected">Không nhận yêu cầu</option></select><small>Khách đồng ý báo giá bằng cách xác nhận đặt hàng trên trang Đơn hàng của tôi.</small></label>
         <label class="settings-field">Lời nhắn / nội dung báo giá<textarea name="quoteNote" rows="3" maxlength="3000" placeholder="Ví dụ: Giá đã gồm phí nguyên liệu và công làm..."></textarea></label>
         <label class="settings-field">Lý do không nhận<textarea name="rejectionReason" rows="2" maxlength="1000"></textarea></label>
         <div class="dialog-actions"><button class="button button--outline" type="button" data-close-dialog>Huỷ</button><button class="button button--dark" type="submit">Cập nhật báo giá</button></div>
       </form>
     </dialog>
+    <div class="admin-loading" id="admin-loading" role="status" aria-live="polite" hidden>
+      <span class="admin-loading__spinner" aria-hidden="true"></span>
+      <span id="admin-loading-message">Đang tải...</span>
+    </div>
   `);
 })();

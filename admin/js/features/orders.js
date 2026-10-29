@@ -33,7 +33,7 @@
       return `<li class="order-timeline__step ${state}"><span class="order-timeline__marker"></span><span>${stage.label}</span></li>`;
     }).join('');
     const items = order.items.map((item) => `
-      <li><span>${store.escapeHTML(item.name)}${item.color ? ` · ${store.escapeHTML(item.color)}` : ''} × ${item.qty}</span><strong>${store.formatPrice(item.price * item.qty)}</strong></li>
+      <li><span>${store.escapeHTML(item.name)}${item.color ? ` · ${store.escapeHTML(item.color)}` : ''} × ${item.qty}${item.customDescription ? `<small class="cell-subtitle">Đặt riêng · Màu: ${store.escapeHTML(item.requestedColors.join(', '))}. ${store.escapeHTML(item.customDescription)}</small>` : ''}</span><strong>${store.formatPrice(item.price * item.qty)}</strong></li>
     `).join('');
     const history = `<li><span>${templates.statusBadge(order.status)}<small>Trạng thái hiện tại</small></span><time>${formatTimestamp(original.updatedAt || original.createdAt)}</time></li>`;
     const nextStage = currentStage >= 0 ? ORDER_STAGES[currentStage + 1] : null;
@@ -108,10 +108,15 @@
     empty.hidden = orders.length > 0;
   }
 
-  async function updateStatus(id, nextStatus) {
+  async function updateStatus(id, nextStatus, button) {
     const order = store.orders.find((item) => item.id === id);
     if (!order) return;
     if (nextStatus === 'cancelled' && !window.confirm(`Xác nhận huỷ đơn hàng ${id.slice(-8)}?`)) return;
+    const stopLoading = store.beginButtonLoading(
+      button,
+      nextStatus === 'cancelled' ? 'Đang hủy...' : 'Đang cập nhật...',
+    );
+    if (button && !stopLoading) return;
     try {
       await KellyApi.request(`/api/orders/${encodeURIComponent(id)}`, {
         method: 'PATCH',
@@ -122,10 +127,14 @@
       window.AdminApp.refreshData();
       const updated = store.orders.find((item) => item.id === id);
       if (updated) renderOrderDetails(updated);
-      store.notify(`Đã cập nhật trạng thái đơn hàng sang “${updated?.status || nextStatus}”.`);
+      store.notify(nextStatus === 'cancelled'
+        ? 'Hủy đơn hàng thành công!'
+        : `Cập nhật trạng thái đơn hàng thành công: ${updated?.status || nextStatus}.`);
     } catch (error) {
       console.error('Không thể cập nhật đơn hàng:', error);
       store.notify(error.message || 'Không thể cập nhật trạng thái đơn hàng.', 'error');
+    } finally {
+      stopLoading?.();
     }
   }
 
@@ -142,7 +151,7 @@
         const button = event.target.closest('[data-order-status]');
         if (!button) return;
         const id = document.getElementById('order-detail-dialog').dataset.orderId;
-        if (id) updateStatus(id, button.dataset.orderStatus);
+        if (id) updateStatus(id, button.dataset.orderStatus, button);
       });
       actions.dataset.adminBound = 'true';
     }
