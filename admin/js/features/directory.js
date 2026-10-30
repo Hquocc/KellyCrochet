@@ -61,8 +61,8 @@
           status: String(data.get('status')),
         },
       });
-      await store.initialize();
-      window.AdminApp.refreshData();
+      await store.reloadCategories();
+      renderCategories();
       document.getElementById('category-dialog').close();
       store.notify(id ? 'Cập nhật danh mục thành công!' : 'Thêm danh mục thành công!');
     } catch (error) {
@@ -85,8 +85,8 @@
     if (button && !stopLoading) return;
     try {
       await KellyApi.request(`/api/categories/${encodeURIComponent(id)}`, { method: 'DELETE', authenticated: true });
-      await store.initialize();
-      window.AdminApp.refreshData();
+      await store.reloadCategories();
+      renderCategories();
       store.notify('Xóa danh mục thành công!');
     } catch (error) {
       console.error('Không thể xoá danh mục:', error);

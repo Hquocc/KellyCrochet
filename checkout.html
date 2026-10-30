@@ -54,7 +54,7 @@
         <form class="checkout-form" id="checkout-form">
           <div class="checkout-field">
             <label class="form-label" for="shipping-name">HỌ VÀ TÊN</label>
-            <input class="form-input" id="shipping-name" name="name" type="text" autocomplete="name" maxlength="120" required />
+            <input class="form-input" id="shipping-name" name="name" type="text" autocomplete="name" placeholder="VD: Nguyễn Thị Thảo" maxlength="120" required />
           </div>
 
           <div class="checkout-field">
@@ -67,6 +67,7 @@
               autocomplete="tel"
               inputmode="tel"
               pattern="[0-9+() -]{9,16}"
+              placeholder="VD: 0912 345 678"
               title="Vui lòng nhập số điện thoại hợp lệ."
               required
             />
@@ -74,33 +75,38 @@
 
           <div class="checkout-field">
             <label class="form-label" for="shipping-email">EMAIL</label>
-            <input class="form-input" id="shipping-email" name="email" type="email" autocomplete="email" maxlength="254" />
+            <input class="form-input" id="shipping-email" name="email" type="email" autocomplete="email" placeholder="VD: email@example.com" maxlength="254" />
           </div>
 
+          <!-- Tỉnh / Thành phố & Xã / Phường -->
           <div class="checkout-field-row">
             <div class="checkout-field">
               <label class="form-label" for="shipping-city">TỈNH / THÀNH PHỐ</label>
-              <input class="form-input" id="shipping-city" name="city" type="text" autocomplete="address-level1" maxlength="120" required />
+              <select class="form-input" id="shipping-city" name="city" required>
+                <option value="">-- Chọn Tỉnh / Thành phố --</option>
+              </select>
             </div>
             <div class="checkout-field">
               <label class="form-label" for="shipping-ward">XÃ / PHƯỜNG</label>
-              <input class="form-input" id="shipping-ward" name="ward" type="text" autocomplete="address-level3" maxlength="120" required />
+              <select class="form-input" id="shipping-ward" name="ward" required disabled>
+                <option value="">-- Chọn Xã / Phường --</option>
+              </select>
             </div>
           </div>
 
           <div class="checkout-field">
             <label class="form-label" for="shipping-neighborhood">KHU PHỐ / ẤP</label>
-            <input class="form-input" id="shipping-neighborhood" name="neighborhood" type="text" maxlength="120" required />
+            <input class="form-input" id="shipping-neighborhood" name="neighborhood" type="text" placeholder="VD: Khu phố 3 / Ấp 1" maxlength="120" />
           </div>
 
           <div class="checkout-field">
             <label class="form-label" for="shipping-address">ĐỊA CHỈ CHI TIẾT (SỐ NHÀ, ĐƯỜNG)</label>
-            <input class="form-input" id="shipping-address" name="address" type="text" autocomplete="street-address" maxlength="250" required />
+            <input class="form-input" id="shipping-address" name="address" type="text" autocomplete="street-address" placeholder="VD: 123 Đường Nguyễn Trãi" maxlength="250" required />
           </div>
 
           <div class="checkout-field">
             <label class="form-label" for="shipping-note">GHI CHÚ (KHÔNG BẮT BUỘC)</label>
-            <textarea class="form-input checkout-note" id="shipping-note" name="note" rows="2" maxlength="500"></textarea>
+            <textarea class="form-input checkout-note" id="shipping-note" name="note" rows="2" placeholder="Ghi chú thêm cho người giao hàng..." maxlength="500"></textarea>
           </div>
 
           <p class="checkout-payment-note">Phương thức thanh toán: Thanh toán khi nhận hàng (COD)</p>

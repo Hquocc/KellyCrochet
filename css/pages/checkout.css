@@ -69,6 +69,38 @@
   line-height: 1.6;
 }
 
+.checkout-form .form-input {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.checkout-form .form-input:focus {
+  border-color: var(--color-text);
+  outline: none;
+}
+
+.checkout-form select.form-input {
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.checkout-form select.form-input option {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.checkout-form select.form-input:disabled {
+  background: var(--color-bg-warm);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
 .checkout-form .form-input[readonly] {
   background: var(--color-bg-warm);
   color: var(--color-text-muted);
@@ -167,6 +199,9 @@
 .checkout-field .form-label {
   display: block;
   margin-bottom: var(--space-2);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
 }
 
 .checkout-field .form-input {
@@ -210,7 +245,7 @@
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 480px) {
   .checkout-field-row {
     grid-template-columns: 1fr;
   }

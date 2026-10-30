@@ -93,7 +93,7 @@
               </div>
             ` : ''}
             ${request.status === 'rejected' ? `<p class="custom-request-card__reason"><strong>Lý do:</strong> ${escapeHTML(request.rejectionReason || 'Cửa hàng hiện chưa thể nhận yêu cầu này.')}</p>` : ''}
-            ${request.status === 'accepted' ? `<p class="custom-request-card__message">Đã đặt thành công. Mã đơn <strong>#${escapeHTML(orderId.slice(-8).toUpperCase())}</strong>; đơn hàng hiển thị trong danh sách bên trên.</p>` : ''}
+            ${request.status === 'accepted' ? `<p class="custom-request-card__message">Đã đặt thành công. Mã đơn <span class="order-code">#${escapeHTML(orderId.slice(-8).toUpperCase())}</span>; đơn hàng hiển thị trong danh sách bên trên.</p>` : ''}
           </article>`;
       }).join('');
     });
@@ -120,7 +120,7 @@
     } catch (error) {
       console.error('Không thể tải đơn hàng đã lưu:', error);
       container.innerHTML = createdOrderId
-        ? `<p role="alert">Đơn hàng #${escapeHTML(createdOrderId.slice(-8).toUpperCase())} đã được gửi, nhưng danh sách theo dõi trên thiết bị bị lỗi. Hãy lưu mã đơn để liên hệ với cửa hàng.</p>`
+        ? `<p role="alert">Đơn hàng <span class="order-code">#${escapeHTML(createdOrderId.slice(-8).toUpperCase())}</span> đã được gửi, nhưng danh sách theo dõi trên thiết bị bị lỗi. Hãy lưu mã đơn để liên hệ với cửa hàng.</p>`
         : '<p role="alert">Không đọc được danh sách đơn hàng trên thiết bị này.</p>';
       return;
     }
@@ -128,7 +128,7 @@
     const savedOrder = orders.find((order) => String(order._id || order.id || '') === createdOrderId);
     let confirmation = '';
     if (createdOrderId) {
-      confirmation = `<p class="orders-confirmation" role="status">${customOrder ? 'Đơn đặt riêng đã được xác nhận' : 'Đơn hàng'} #${escapeHTML(createdOrderId.slice(-8).toUpperCase())} đã được gửi đến cửa hàng.${trackingSaved ? '' : ' Không thể lưu trạng thái theo dõi trên thiết bị; hãy giữ lại mã đơn để liên hệ với cửa hàng.'}${cartCleared ? '' : ' Giỏ hàng trên thiết bị chưa được xoá; hãy kiểm tra trước khi đặt đơn tiếp.'}</p>`;
+      confirmation = `<p class="orders-confirmation" role="status">${customOrder ? 'Đơn đặt riêng đã được xác nhận' : 'Đơn hàng'} <span class="order-code">#${escapeHTML(createdOrderId.slice(-8).toUpperCase())}</span> đã được gửi đến cửa hàng.${trackingSaved ? '' : ' Không thể lưu trạng thái theo dõi trên thiết bị; hãy giữ lại mã đơn để liên hệ với cửa hàng.'}${cartCleared ? '' : ' Giỏ hàng trên thiết bị chưa được xoá; hãy kiểm tra trước khi đặt đơn tiếp.'}</p>`;
       if (!savedOrder) {
         container.innerHTML = `${confirmation}<a href="shop.html" class="btn btn--dark">TIẾP TỤC MUA SẮM</a>`;
         return;
@@ -164,7 +164,7 @@
       return `
         <article class="order-item">
           <div>
-            <p class="order-item__name">Đơn hàng #${escapeHTML(String(orderId).slice(-8).toUpperCase())}</p>
+            <p class="order-item__name">Đơn hàng <span class="order-code">#${escapeHTML(String(orderId).slice(-8).toUpperCase())}</span></p>
             <p class="order-item__meta">${escapeHTML(formatDate(order.createdAt || order.date))} · ${items}</p>
             <p class="order-item__meta">${escapeHTML(customer.name || '')} · ${escapeHTML(customer.phone || '')}</p>
             <p class="order-item__meta">${escapeHTML(address)}</p>

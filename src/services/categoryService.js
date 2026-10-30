@@ -1,6 +1,7 @@
 const Category = require('../models/Category');
 const CustomRequest = require('../models/CustomRequest');
 const Product = require('../models/Product');
+const { invalidateCategoryCache } = require('./productService');
 const { AppError } = require('../utils/errors');
 const { pageResult } = require('../utils/http');
 
@@ -14,11 +15,13 @@ async function listCategories(pagination, includeHidden) {
 }
 
 async function createCategory(input) {
-  return Category.create({
+  const created = await Category.create({
     name: input.name,
     description: input.description || '',
     status: input.status || 'visible',
   });
+  invalidateCategoryCache();
+  return created;
 }
 
 async function updateCategory(id, input) {
@@ -28,6 +31,7 @@ async function updateCategory(id, input) {
   if (Object.hasOwn(input, 'description')) category.description = input.description;
   if (Object.hasOwn(input, 'status')) category.status = input.status;
   await category.save();
+  invalidateCategoryCache();
   return category;
 }
 
@@ -42,6 +46,7 @@ async function deleteCategory(id) {
 
   const category = await Category.findByIdAndDelete(id);
   if (!category) throw new AppError('Category not found.', 404);
+  invalidateCategoryCache();
 }
 
 module.exports = { createCategory, deleteCategory, listCategories, updateCategory };

@@ -46,9 +46,20 @@
 }
 
 .order-item__name {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: var(--text-base);
+  font-weight: normal;
+  color: var(--color-text);
   margin-bottom: var(--space-1);
+}
+
+.order-code {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: 0.02em;
+  color: inherit;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .order-item__meta {

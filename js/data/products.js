@@ -164,15 +164,38 @@ function mapApiProduct(product) {
 
 let catalogLoaded = false;
 let catalogLoadPromise;
+const CATALOG_CACHE_KEY = 'kc_catalog_cache_v1';
+const CATALOG_CACHE_TTL = 3 * 60 * 1000; // 3 phút cache nhanh giữa các trang
 
-function loadProducts() {
-  if (catalogLoaded) return Promise.resolve(PRODUCTS);
-  if (catalogLoadPromise) return catalogLoadPromise;
+function loadProducts(forceRefresh = false) {
+  if (!forceRefresh && catalogLoaded) return Promise.resolve(PRODUCTS);
+  if (!forceRefresh && catalogLoadPromise) return catalogLoadPromise;
+
+  if (!forceRefresh) {
+    try {
+      const cached = sessionStorage.getItem(CATALOG_CACHE_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Date.now() - parsed.timestamp < CATALOG_CACHE_TTL && Array.isArray(parsed.data) && parsed.data.length > 0) {
+          PRODUCTS.splice(0, PRODUCTS.length, ...parsed.data.map(mapApiProduct));
+          catalogLoaded = true;
+          return Promise.resolve(PRODUCTS);
+        }
+      }
+    } catch (_) {}
+  }
+
   if (!window.KellyApi) throw new Error('API client is unavailable.');
   catalogLoadPromise = window.KellyApi.all('/api/products')
     .then((products) => {
       PRODUCTS.splice(0, PRODUCTS.length, ...products.map(mapApiProduct));
       catalogLoaded = true;
+      try {
+        sessionStorage.setItem(CATALOG_CACHE_KEY, JSON.stringify({
+          data: products,
+          timestamp: Date.now(),
+        }));
+      } catch (_) {}
       return PRODUCTS;
     })
     .catch((error) => {
@@ -182,8 +205,15 @@ function loadProducts() {
   return catalogLoadPromise;
 }
 
+function clearCatalogCache() {
+  catalogLoaded = false;
+  catalogLoadPromise = undefined;
+  try { sessionStorage.removeItem(CATALOG_CACHE_KEY); } catch (_) {}
+}
+
 window.ProductCatalog = {
   load: loadProducts,
   map: mapApiProduct,
+  clearCache: clearCatalogCache,
   get loaded() { return catalogLoaded; },
 };

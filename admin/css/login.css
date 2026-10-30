@@ -87,6 +87,14 @@
   padding-right: 52px;
 }
 
+/* Ẩn con mắt hiện mật khẩu mặc định của Microsoft Edge / IE / Chromium */
+.login-password input::-ms-reveal,
+.login-password input::-ms-clear {
+  display: none !important;
+  width: 0;
+  height: 0;
+}
+
 .password-toggle {
   position: absolute;
   top: 50%;

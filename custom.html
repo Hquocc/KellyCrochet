@@ -45,22 +45,32 @@
       <div class="custom-form-wrap section-fade-in">
         <form class="custom-form" id="custom-order-form" novalidate>
 
-          <div class="form-field">
-            <label class="form-label" for="customer-name">TÊN CỦA BẠN</label>
-            <input class="form-input" id="customer-name" type="text" name="name" maxlength="120" required />
-            <span class="form-error" id="error-name"></span>
+          <div class="custom-form__row">
+            <div class="form-field">
+              <label class="form-label" for="customer-name">TÊN CỦA BẠN</label>
+              <input class="form-input" id="customer-name" type="text" name="name" maxlength="120" placeholder="VD: Thu Hà" required />
+              <span class="form-error" id="error-name"></span>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="customer-phone">SỐ ĐIỆN THOẠI</label>
+              <input class="form-input" id="customer-phone" type="tel" name="phone" autocomplete="tel" inputmode="tel" pattern="[0-9+() -]{8,30}" maxlength="30" title="Vui lòng nhập số điện thoại hợp lệ." placeholder="VD: 0912 345 678" required />
+              <span class="form-error" id="error-phone"></span>
+            </div>
           </div>
 
-          <div class="form-field">
-            <label class="form-label" for="customer-phone">SỐ ĐIỆN THOẠI</label>
-            <input class="form-input" id="customer-phone" type="tel" name="phone" autocomplete="tel" inputmode="tel" pattern="[0-9+() -]{8,30}" maxlength="30" title="Vui lòng nhập số điện thoại hợp lệ." required />
-            <span class="form-error" id="error-phone"></span>
-          </div>
+          <div class="custom-form__row">
+            <div class="form-field">
+              <label class="form-label" for="customer-email">EMAIL</label>
+              <input class="form-input" id="customer-email" type="email" name="email" autocomplete="email" maxlength="254" placeholder="VD: email@example.com" required />
+              <span class="form-error" id="error-email"></span>
+            </div>
 
-          <div class="form-field">
-            <label class="form-label" for="customer-email">EMAIL</label>
-            <input class="form-input" id="customer-email" type="email" name="email" autocomplete="email" maxlength="254" required />
-            <span class="form-error" id="error-email"></span>
+            <div class="form-field">
+              <label class="form-label" for="customer-productName">TÊN SẢN PHẨM MUỐN LÀM</label>
+              <input class="form-input" id="customer-productName" type="text" name="productName" required maxlength="160" placeholder="VD: Túi tote đeo vai" />
+              <span class="form-error" id="error-productName"></span>
+            </div>
           </div>
 
           <div class="form-field">
@@ -76,33 +86,30 @@
             <span class="form-error" id="error-productType"></span>
           </div>
 
-          <div class="form-field">
-            <label class="form-label" for="customer-productName">TÊN SẢN PHẨM MUỐN LÀM</label>
-            <input class="form-input" id="customer-productName" type="text" name="productName" required maxlength="160" placeholder="VD: Túi tote đeo vai" />
-            <span class="form-error" id="error-productName"></span>
-          </div>
+          <div class="custom-form__row">
+            <div class="form-field">
+              <label class="form-label" for="color-wish">MÀU SẮC MONG MUỐN</label>
+              <input
+                class="form-input"
+                id="color-wish"
+                type="text"
+                name="color"
+                required
+                maxlength="800"
+                placeholder="VD: kem phối hồng đất"
+              />
+              <span class="form-error" id="error-color"></span>
+            </div>
 
-          <div class="form-field">
-            <label class="form-label" for="color-wish">MÀU SẮC MONG MUỐN</label>
-            <input
-              class="form-input"
-              id="color-wish"
-              type="text"
-              name="color"
-              required
-              maxlength="800"
-              placeholder="VD: kem phối hồng đất"
-            />
-          </div>
-
-          <div class="form-field">
-            <label class="form-label" for="budget">NGÂN SÁCH</label>
-            <select class="form-select" id="budget" name="budget">
-              <option value="under300">Dưới 300.000₫</option>
-              <option value="under500">Dưới 500.000₫</option>
-              <option value="under1000">Dưới 1.000.000₫</option>
-              <option value="discuss">Thảo luận thêm</option>
-            </select>
+            <div class="form-field">
+              <label class="form-label" for="budget">NGÂN SÁCH DỰ KIẾN</label>
+              <select class="form-select" id="budget" name="budget">
+                <option value="under100">Dưới 100.000₫</option>
+                <option value="under400">Dưới 300.000₫</option>
+                <option value="under500">Dưới 500.000₫</option> 
+                <option value="discuss">Thảo luận thêm</option>
+              </select>
+            </div>
           </div>
 
           <div class="form-field">
@@ -111,11 +118,12 @@
               class="form-textarea"
               id="description"
               name="description"
-              rows="5"
+              rows="3"
               required
               maxlength="5000"
-              placeholder="Kể cho Kelly nghe thêm nhé..."
+              placeholder="Kể cho Kelly nghe thêm về kích thước, người nhận hoặc ý tưởng..."
             ></textarea>
+            <span class="form-error" id="error-description"></span>
           </div>
 
           <button type="submit" class="btn btn--dark btn--full">GỬI YÊU CẦU</button>

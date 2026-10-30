@@ -123,8 +123,10 @@
         authenticated: true,
         body: { status: nextStatus },
       });
-      await store.initialize();
-      window.AdminApp.refreshData();
+      await store.reloadOrders();
+      render();
+      renderRecent();
+      window.AdminDirectory?.renderCustomers?.();
       const updated = store.orders.find((item) => item.id === id);
       if (updated) renderOrderDetails(updated);
       store.notify(nextStatus === 'cancelled'

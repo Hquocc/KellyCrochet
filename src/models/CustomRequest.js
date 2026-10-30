@@ -40,5 +40,6 @@ const customRequestSchema = new mongoose.Schema({
 
 customRequestSchema.index({ createdAt: -1 });
 customRequestSchema.index({ 'customer.phone': 1, createdAt: -1 });
+customRequestSchema.index({ status: 1, createdAt: -1 });
 
 module.exports = mongoose.models.CustomRequest || mongoose.model('CustomRequest', customRequestSchema);

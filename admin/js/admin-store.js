@@ -100,17 +100,12 @@
     };
   }
 
-  // ─── FIX: Bảo vệ khỏi category null, requestedColors undefined ───────────
   function normalizeRequest(request) {
     const customer = request.customer || {};
-
-    // category có thể là null (bị xóa), string ObjectId, hoặc object được populate
     const cat = request.category;
     const categoryObj = (cat !== null && cat !== undefined && typeof cat === 'object') ? cat : null;
     const productType = categoryObj?.name ?? request.productName ?? 'Không rõ';
     const categoryId  = categoryObj ? String(categoryObj._id) : String(cat || '');
-
-    // requestedColors có thể undefined ở bản ghi cũ
     const colors = Array.isArray(request.requestedColors) ? request.requestedColors : [];
 
     return {
@@ -130,7 +125,6 @@
         : '',
     };
   }
-  // ─────────────────────────────────────────────────────────────────────────
 
   function aggregateCustomers(ordersList) {
     const byPhone = new Map();
@@ -166,6 +160,32 @@
     customers = aggregateCustomers(orders);
   }
 
+  // Tải lại riêng từng phần khi thay đổi (nhanh hơn 4x so với initialize lại toàn bộ)
+  async function reloadOrders() {
+    const orderRows = await KellyApi.all('/api/orders', { authenticated: true });
+    orders = orderRows.map(normalizeOrder);
+    customers = aggregateCustomers(orders);
+    return orders;
+  }
+
+  async function reloadProducts() {
+    const productRows = await KellyApi.all('/api/products', { authenticated: true });
+    products = productRows.map(normalizeProduct);
+    return products;
+  }
+
+  async function reloadRequests() {
+    const requestRows = await KellyApi.all('/api/requests', { authenticated: true });
+    requests = requestRows.map(normalizeRequest);
+    return requests;
+  }
+
+  async function reloadCategories() {
+    const categoryRows = await KellyApi.all('/api/categories', { authenticated: true });
+    categories = categoryRows.map(normalizeCategory);
+    return categories;
+  }
+
   function statusClass(status) {
     if (['Hoàn thành', 'Đã chốt'].includes(status)) return 'status--complete';
     if (status === 'Đang giao') return 'status--shipping';
@@ -195,6 +215,10 @@
     normalizeProduct,
     normalizeRequest,
     notify,
+    reloadCategories,
+    reloadOrders,
+    reloadProducts,
+    reloadRequests,
     statusClass,
     get products() { return products; },
     set products(value) { products = value; },

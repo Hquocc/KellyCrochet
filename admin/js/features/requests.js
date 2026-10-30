@@ -92,8 +92,8 @@
           ...(rejectionReason ? { rejectionReason } : {}),
         },
       });
-      await store.initialize();
-      window.AdminApp.refreshData();
+      await store.reloadRequests();
+      render();
       document.getElementById('quote-dialog').close();
       store.notify(status === 'quoted' ? 'Gửi báo giá thành công!' : 'Từ chối yêu cầu thành công!');
     } catch (error) {

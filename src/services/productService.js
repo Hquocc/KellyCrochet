@@ -8,10 +8,29 @@ function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+// In-memory cache cho danh mục hiển thị (tránh hit MongoDB liên tục ở mỗi request xem sản phẩm)
+let visibleCategoriesCache = null;
+let visibleCategoriesExpiry = 0;
+
+async function getVisibleCategories() {
+  const now = Date.now();
+  if (visibleCategoriesCache && now < visibleCategoriesExpiry) {
+    return visibleCategoriesCache;
+  }
+  visibleCategoriesCache = await Category.find({ status: 'visible' }).distinct('_id');
+  visibleCategoriesExpiry = now + 60000; // 60 giây TTL
+  return visibleCategoriesCache;
+}
+
+function invalidateCategoryCache() {
+  visibleCategoriesCache = null;
+  visibleCategoriesExpiry = 0;
+}
+
 async function listProducts(query, pagination, includeHidden) {
   const filter = {};
   if (!includeHidden) {
-    const visibleCategories = await Category.find({ status: 'visible' }).distinct('_id');
+    const visibleCategories = await getVisibleCategories();
     filter.status = 'selling';
     filter.category = query.category
       ? { $in: visibleCategories, $eq: query.category }
@@ -84,4 +103,11 @@ async function deleteProduct(id) {
   if (!product) throw new AppError('Product not found.', 404);
 }
 
-module.exports = { createProduct, deleteProduct, getProduct, listProducts, updateProduct };
+module.exports = {
+  createProduct,
+  deleteProduct,
+  getProduct,
+  invalidateCategoryCache,
+  listProducts,
+  updateProduct,
+};

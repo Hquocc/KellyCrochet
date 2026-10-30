@@ -36,8 +36,9 @@
   }
 
   async function reload() {
-    await store.initialize();
-    window.AdminApp.refreshData();
+    await store.reloadProducts();
+    render();
+    refreshCounts();
   }
 
   async function save(event) {

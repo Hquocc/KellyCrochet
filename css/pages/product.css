@@ -119,11 +119,12 @@
 }
 
 .product-detail__price {
-  color: var(--price-color);
-  font-family: var(--price-font-family);
-  font-size: var(--price-font-size);
-  font-weight: var(--price-font-weight);
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  font-size: var(--text-xl); /* 1.5rem (24px) - to rõ theo mẫu */
+  font-weight: 500;
   font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: -0.01em;
   margin-bottom: var(--space-6);
 }
 

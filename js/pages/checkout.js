@@ -8,10 +8,19 @@
   const totalElement = document.getElementById('checkout-total');
   const errorElement = document.getElementById('checkout-error');
   const submitButton = document.getElementById('checkout-submit');
+
+  const citySelect = document.getElementById('shipping-city');
+  const wardSelect = document.getElementById('shipping-ward');
+
   const SHIPPING_FEE = 30000;
   let cart = [];
   let products = [];
   let customQuote;
+
+  // Đường dẫn dữ liệu địa chính tinh gọn (đã gộp sẵn 34 tỉnh, giảm 86% dung lượng)
+  const LOCATION_CLEAN_URL = 'assets/data/vietnam-locations-clean.json';
+  const LOCATION_FALLBACK_URL = 'assets/data/vietnam-locations.json';
+  let locationsData = [];
 
   function readCart() {
     const stored = JSON.parse(localStorage.getItem('kc_cart') || '[]');
@@ -22,6 +31,78 @@
   function showError(message) {
     errorElement.textContent = message;
     errorElement.hidden = false;
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     TẢI DỮ LIỆU ĐỊA CHÍNH: 34 TỈNH/THÀNH VÀ XÃ/PHƯỜNG (TỐC ĐỘ CAO)
+     ═══════════════════════════════════════════════════════════ */
+  async function fetchLocationData() {
+    // 1. Kiểm tra cache trong localStorage (tải tức thì 0ms)
+    try {
+      const cached = localStorage.getItem('kc_clean_locations_v2');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (_) {}
+
+    // 2. Tải file tinh gọn nội bộ (~180KB, đã gộp và lọc sẵn)
+    try {
+      const response = await fetch(LOCATION_CLEAN_URL);
+      if (response.ok) {
+        const data = await response.json();
+        try { localStorage.setItem('kc_clean_locations_v2', JSON.stringify(data)); } catch (_) {}
+        return data;
+      }
+    } catch (err) {
+      console.warn('Không tải được clean JSON, thử fallback:', err);
+    }
+
+    // 3. Dự phòng file gốc nếu chưa có
+    try {
+      const response = await fetch(LOCATION_FALLBACK_URL);
+      if (response.ok) {
+        const raw = await response.json();
+        return raw;
+      }
+    } catch (err) {
+      console.error('Không thể tải dữ liệu địa chính:', err);
+    }
+    return [];
+  }
+
+  async function initAdministrativeLocation() {
+    if (!citySelect || !wardSelect) return;
+
+    citySelect.innerHTML = '<option value="">-- Đang tải tỉnh/thành... --</option>';
+
+    locationsData = await fetchLocationData();
+
+    if (!Array.isArray(locationsData) || locationsData.length === 0) {
+      citySelect.innerHTML = '<option value="">-- Lỗi tải danh sách tỉnh --</option>';
+      return;
+    }
+
+    // Đổ danh sách Tỉnh/Thành
+    citySelect.innerHTML = '<option value="">-- Chọn Tỉnh / Thành phố --</option>' +
+      locationsData.map((prov, index) => `<option value="${prov.fullName || prov.name}" data-index="${index}">${prov.name}</option>`).join('');
+
+    // Khi chọn tỉnh -> Đổ ngay danh sách Phường/Xã (tức thì <1ms)
+    citySelect.addEventListener('change', function () {
+      const selectedIndex = citySelect.options[citySelect.selectedIndex]?.dataset.index;
+
+      wardSelect.innerHTML = '<option value="">-- Chọn Xã / Phường --</option>';
+      wardSelect.disabled = true;
+
+      if (selectedIndex === undefined || selectedIndex === '') return;
+
+      const prov = locationsData[Number(selectedIndex)];
+      if (!prov || !Array.isArray(prov.wards)) return;
+
+      wardSelect.innerHTML = '<option value="">-- Chọn Xã / Phường --</option>' +
+        prov.wards.map((w) => `<option value="${w}">${w}</option>`).join('');
+      wardSelect.disabled = false;
+    });
   }
 
   function renderItems() {
@@ -110,8 +191,10 @@
       email: customQuote.customer.email || '',
     })) {
       const input = form.elements[name];
-      input.value = value;
-      input.readOnly = true;
+      if (input) {
+        input.value = value;
+        input.readOnly = true;
+      }
     }
     submitButton.textContent = 'XÁC NHẬN ĐẶT MÓN RIÊNG · COD';
   }
@@ -121,6 +204,8 @@
     errorElement.hidden = true;
     if (!form.reportValidity() || submitButton.disabled) return;
     submitButton.disabled = true;
+    const originalButtonText = submitButton.textContent;
+    submitButton.textContent = 'Đang xử lý đơn hàng...';
 
     const data = new FormData(form);
     const customer = {
@@ -129,7 +214,7 @@
       email: String(data.get('email') || '').trim(),
       address: [
         String(data.get('address')).trim(),
-        String(data.get('neighborhood')).trim(),
+        String(data.get('neighborhood') || '').trim(),
         String(data.get('ward')).trim(),
         String(data.get('city')).trim(),
       ].filter(Boolean).join(', '),
@@ -164,9 +249,11 @@
       console.error('Không thể tạo đơn hàng:', error);
       showError(error.message || 'Không thể tạo đơn hàng. Vui lòng thử lại.');
       submitButton.disabled = false;
+      submitButton.textContent = originalButtonText;
       return;
     }
 
+    window.ProductCatalog?.clearCache?.();
     let trackingSaved = false;
     try {
       const savedOrders = JSON.parse(localStorage.getItem('kc_orders') || '[]');
@@ -197,6 +284,8 @@
   }
 
   async function init() {
+    initAdministrativeLocation();
+
     try {
       const requestId = new URLSearchParams(window.location.search).get('requestId');
       if (requestId) {

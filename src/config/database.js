@@ -28,9 +28,9 @@ async function connectToDatabase() {
 
   if (!cache.promise) {
     cache.promise = mongoose.connect(uri, {
-      maxPoolSize: 5, // Keep each Vercel function instance's pool small.
-      minPoolSize: 0, // Avoid idle connections while an instance is inactive.
-      maxIdleTimeMS: 30000, // Reclaim connections after short serverless idle periods.
+      maxPoolSize: 10,
+      minPoolSize: 1, // Giữ ít nhất 1 kết nối ấm (tránh SSL TLS handshake lag khi khách đặt hàng)
+      maxIdleTimeMS: 60000,
     }).catch((error) => {
       cache.promise = null;
       throw error;
