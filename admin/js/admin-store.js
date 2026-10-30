@@ -100,23 +100,37 @@
     };
   }
 
+  // ─── FIX: Bảo vệ khỏi category null, requestedColors undefined ───────────
   function normalizeRequest(request) {
     const customer = request.customer || {};
+
+    // category có thể là null (bị xóa), string ObjectId, hoặc object được populate
+    const cat = request.category;
+    const categoryObj = (cat !== null && cat !== undefined && typeof cat === 'object') ? cat : null;
+    const productType = categoryObj?.name ?? request.productName ?? 'Không rõ';
+    const categoryId  = categoryObj ? String(categoryObj._id) : String(cat || '');
+
+    // requestedColors có thể undefined ở bản ghi cũ
+    const colors = Array.isArray(request.requestedColors) ? request.requestedColors : [];
+
     return {
       ...request,
       id: String(request._id),
       name: customer.name || 'Khách hàng',
       phone: customer.phone || '',
       email: customer.email || '',
-      productType: typeof request.category === 'object' ? request.category.name : request.productName,
-      categoryId: String(typeof request.category === 'object' ? request.category._id : request.category),
-      color: request.requestedColors.join(', '),
+      productType,
+      categoryId,
+      color: colors.join(', '),
       quote: request.quotedPrice || 0,
       quoteNote: request.quoteMessage || '',
       statusLabel: REQUEST_STATUS[request.status] || request.status,
-      createdAt: request.createdAt ? new Intl.DateTimeFormat('vi-VN').format(new Date(request.createdAt)) : '',
+      createdAt: request.createdAt
+        ? new Intl.DateTimeFormat('vi-VN').format(new Date(request.createdAt))
+        : '',
     };
   }
+  // ─────────────────────────────────────────────────────────────────────────
 
   function aggregateCustomers(ordersList) {
     const byPhone = new Map();
